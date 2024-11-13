@@ -2,7 +2,7 @@
 FROM node:14
 
 # Diretório dos arquivos no container
-WORKDIR /app
+WORKDIR .
 
 # Copia os arquivos package*.json ./ para o diretório de arquivo
 COPY package*.json ./
