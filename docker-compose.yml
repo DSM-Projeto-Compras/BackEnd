@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "4000:4000"
+    volumes:
+      - .:/BackEnd
+      - /BackEnd/node_modules
+    working_dir: /BackEnd
+    environment:
+      - MONGO_URI=${MONGODB_URI}
+    networks:
+      - rede_compras
+
+  # #backend
+  # back_end:
+  #   image: 
+  #   build:
+  #     context: 
+  #     dockerfile: Dockerfile
+  #   container_name: back_end
+  #   environment:
+  #     
+  #   depends_on:
+  #     - mongo
+  #   ports:
+  #     - "4000:4000"
+  #   networks:
+  #     - rede_compras
+
+networks:
+  rede_compras:
+    driver: bridge
