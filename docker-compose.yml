@@ -26,10 +26,9 @@ services:
     ports:
       - 27017:27017
     environment:
-      # Definir o usuário e senha do banco de dados
-      - MONGO_INITDB_ROOT_USERNAME=thiagodiegoli
-      - MONGO_INITDB_ROOT_PASSWORD=pdgjoxtuGQACsPmy
-      - MONGO_INITDB_DATABASE=${MONGODB_DB}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
 
 volumes:
   mongo_data:
