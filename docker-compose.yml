@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/BackEnd
+      - /BackEnd/node_modules
+    working_dir: /BackEnd
+    environment:
+      - MONGO_URI=${MONGODB_URI}
+    networks:
+      - rede_compras
+
+  database:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - rede_compras
+    ports:
+      - 27017:27017
+    environment:
+      # Definir o usuário e senha do banco de dados
+      - MONGO_INITDB_ROOT_USERNAME=thiagodiegoli
+      - MONGO_INITDB_ROOT_PASSWORD=pdgjoxtuGQACsPmy
+      - MONGO_INITDB_DATABASE=${MONGODB_DB}
+
+volumes:
+  mongo_data:
+
+networks:
+  rede_compras:
+    driver: bridge
