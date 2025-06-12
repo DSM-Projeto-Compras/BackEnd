@@ -7,7 +7,7 @@ import productRoutes from './routes/ProductRoute.js';
 import cors from 'cors';
 import fs from 'fs'
 import swaggerUI from 'swagger-ui-express'
-import swaggerFile  from './swagger/swagger_output.json' assert { type: 'json' };
+import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
 
 dotenv.config();
 
