@@ -1,4 +1,6 @@
-@baseURL = https://projeto-mvc-restful-server.vercel.app/api/logins
+@baseURL = http://localhost:4000/api/logins
+@adminAccessToken = ?
+
 
 # Cadastro de um novo usuário comum
 POST {{baseURL}}/cadastro
@@ -61,3 +63,46 @@ Content-Type: application/json
 # Este exemplo mostra como seria o login de um usuário administrador.
 # Porém, a conta de administrador deve ser configurada diretamente no banco de dados.
 # Para fins de teste, você pode usar as credenciais de um administrador criado manualmente.
+
+###
+# Cadastro de um novo administrador (requer token de admin)
+POST {{baseURL}}/cadastro-admin
+Content-Type: application/json
+access-token: {{adminAccessToken}}
+
+{
+    "nome": "Novo Administrador",
+    "email": "novoadmin@email.com",
+    "senha": "admin456"
+}
+
+# Explicação:
+# Esta requisição permite que um administrador cadastre outro administrador.
+# É necessário estar autenticado como admin (token no header Authorization).
+# Substitua "SEU_TOKEN_ADMIN_AQUI" pelo token obtido no login do admin.
+
+###
+# Delete de usuário (requer token de admin)
+DELETE {{baseURL}}/usuario/684b65b0fbb51afa4edbde0e
+access-token: {{adminAccessToken}}
+
+# Explicação:
+# Esta requisição permite que um administrador delete um usuário.
+# É necessário estar autenticado como admin (token no header Authorization).
+# Substitua 684b65b0fbb51afa4edbde0e pelo ID do usuário que deseja deletar.
+# Observações:
+# - Admins não podem deletar usuários mais antigos que eles mesmos
+# - Admins não podem deletar a própria conta
+
+###
+# Exemplo com IDs específicos para teste
+# Delete de usuário específico (substitua pelos IDs reais)
+DELETE {{baseURL}}/usuario/684b678dfbb51afa4edbde19
+access-token: {{adminAccessToken}}
+
+# Explicação:
+# Exemplo com um ID fictício. Para usar:
+# 1. Faça login como admin para obter o token
+# 2. Liste os usuários (se houver endpoint) ou use o MongoDB Compass para ver os IDs
+# 3. Substitua o ID no endpoint
+# 4. Substitua o token pelo token real obtido no login
