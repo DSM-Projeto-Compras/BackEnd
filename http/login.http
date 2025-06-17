@@ -1,5 +1,5 @@
 @baseURL = http://localhost:4000/api/logins
-@adminAccessToken = ?
+@adminAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRiNzA2ZDlhYTAxYWUxNjBkNjQ0YjgiLCJpYXQiOjE3NDk3NzQ0NTQsImV4cCI6MTc0OTg2MDg1NH0.Mmv6rIs4xC7AHyktLb937O2oWU4WbZlNCfrLdf8H0pQ
 
 
 # Cadastro de um novo usuário comum
@@ -88,7 +88,7 @@ access-token: {{adminAccessToken}}
 
 # Explicação:
 # Esta requisição permite que um administrador delete um usuário.
-# É necessário estar autenticado como admin (token no header Authorization).
+# É necessárioestar autenticado como admin (token no header Authorization).
 # Substitua 684b65b0fbb51afa4edbde0e pelo ID do usuário que deseja deletar.
 # Observações:
 # - Admins não podem deletar usuários mais antigos que eles mesmos
@@ -106,3 +106,93 @@ access-token: {{adminAccessToken}}
 # 2. Liste os usuários (se houver endpoint) ou use o MongoDB Compass para ver os IDs
 # 3. Substitua o ID no endpoint
 # 4. Substitua o token pelo token real obtido no login
+
+###
+# Solicitar código de recuperação de senha
+POST {{baseURL}}/forgot
+Content-Type: application/json
+
+{
+    "email": "usuario@email.com"
+}
+
+# Explicação:
+# Esta requisição envia um código de 6 dígitos para o email do usuário.
+# O código tem validade de 15 minutos.
+# Substitua pelo email de um usuário cadastrado no sistema.
+
+###
+# Verificar código de recuperação
+POST {{baseURL}}/verify
+Content-Type: application/json
+
+{
+    "email": "usuario@email.com",
+    "codigo": "123456"
+}
+
+# Explicação:
+# Esta requisição verifica se o código enviado por email está correto.
+# Substitua "123456" pelo código de 6 dígitos recebido no email.
+# O email deve ser o mesmo usado na requisição /forgot.
+
+###
+# Redefinir senha com código
+POST {{baseURL}}/reset
+Content-Type: application/json
+
+{
+    "email": "usuario@email.com",
+    "codigo": "123456",
+    "novaSenha": "novasenha123"
+}
+
+# Explicação:
+# Esta requisição redefine a senha do usuário usando o código verificado.
+# Após o sucesso, o código é invalidado e removido do banco.
+# A nova senha deve ter pelo menos 6 caracteres.
+
+###
+# Exemplo completo de fluxo de recuperação de senha
+# 1. Primeiro, solicite o código
+POST {{baseURL}}/forgot
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com"
+}
+
+###
+# 2. Verifique o código recebido no email
+POST {{baseURL}}/verify
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com",
+    "codigo": "654321"
+}
+
+###
+# 3. Redefina a senha
+POST {{baseURL}}/reset
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com",
+    "codigo": "654321",
+    "novaSenha": "novasenhaadmin123"
+}
+
+###
+# Teste de erro - código expirado (após 15 minutos)
+POST {{baseURL}}/verify
+Content-Type: application/json
+
+{
+    "email": "usuario@email.com",
+    "codigo": "999999"
+}
+
+# Explicação:
+# Esta requisição deve retornar erro se o código estiver expirado
+# ou se for um código inválido.
