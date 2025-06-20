@@ -124,6 +124,7 @@
     },
     "/api/products/": {
       "get": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "CRUD de Produtos"
         ],
@@ -142,6 +143,7 @@
         }
       },
       "post": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "CRUD de Produtos"
         ],
@@ -180,6 +182,7 @@
         }
       },
       "put": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "CRUD de Produtos"
         ],
@@ -223,6 +226,7 @@
     },
     "/api/products/{id}": {
       "delete": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "CRUD de Produtos"
         ],
@@ -254,6 +258,7 @@
     },
     "/api/products/all": {
       "get": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "CRUD de Produtos"
         ],
@@ -271,6 +276,7 @@
     },
     "/api/products/aprove/{id}": {
       "put": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "CRUD de Produtos"
         ],

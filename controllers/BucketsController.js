@@ -1,3 +1,13 @@
+import AWS from 'aws-sdk';
+AWS.config.update({
+  region: process.env.REGION,
+  //accessKeyId: process.env.ACCESS_KEY_ID,
+  //secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  //sessionToken: process.env.SESSION_TOKEN
+});
+
+const s3 = new AWS.S3();
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -58,8 +68,12 @@ export const uploadFileToBucket = async (req, res) => {
 
 export const deleteFileFromBucket = async (req, res) => {
     try {
+        const { bucketName, fileName } = req.params;
+        const data = await s3.deleteObject({ Bucket: bucketName, Key: fileName }).promise();
         logInfo('Objeto removido', req, data.Buckets);
+        res.status(200).json({ message: 'Objeto removido com sucesso', data });
     } catch (error) {
         logError("Erro ao remover objeto", req, error);
+        res.status(500).json({ error: 'Erro ao remover objeto do bucket', details: error });
     }
 }

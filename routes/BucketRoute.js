@@ -6,14 +6,14 @@ dotenv.config();
 
 const router = express.Router();
 
-router.get('/buckets', listBuckets);
+router.get('/', listBuckets);
 
-router.get('/buckets/:bucketName', getBucketByName);
+router.get('/:bucketName', getBucketByName);
 
 // Configuração do multer para armazenar em memória
 const upload = multer({ storage: multer.memoryStorage() });
-router.post('/buckets/:bucketName/upload', upload.single('file'), uploadFileToBucket);
+router.post('/:bucketName/upload', upload.single('file'), uploadFileToBucket);
 
-router.delete('/buckets/:bucketName/file/:fileName', deleteFileFromBucket);
+router.delete('/:bucketName/file/:fileName', deleteFileFromBucket);
 
 export default router;

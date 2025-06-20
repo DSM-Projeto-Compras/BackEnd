@@ -31,8 +31,6 @@ app.use(cors({
 app.use(express.json())
 app.disable('x-powered-by')
 
-//Logger para AWS CloudWatch
-
 
 // Middlewares
 app.use(bodyParser.json());
@@ -57,6 +55,8 @@ app.get('/api', (req, res)=> {
 app.use('/api/logins', LoginRoute);
 app.use('/api/products', productRoutes);
 
+app.use('/api/buckets', bucketRoute);
+
 /* app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(JSON.parse(fs.readFileSync('./swagger/swagger_output.json')),{customCss:
   '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
 customCssUrl: CSS_URL })) */
@@ -66,20 +66,11 @@ app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile, {customCss:
   customCssUrl: CSS_URL
 }));
 
-//# Region S3
-AWS.config.update({
-  region: process.env.REGION,
-  //accessKeyId: process.env.ACCESS_KEY_ID,
-  //secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  //sessionToken: process.env.SESSION_TOKEN
-});
-
-const s3 = new AWS.S3();
-
+//# Region S3 configurada no BucketController.js
 app.use('/api/buckets', bucketRoute);
 
 // Iniciar o servidor
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
