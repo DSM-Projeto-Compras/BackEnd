@@ -1,4 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { logInfo, logError } from "../logger.js";
+
 
 export const listBuckets = async (req, res) => {
     try {

@@ -9,12 +9,13 @@ import cors from 'cors';
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
 
+dotenv.config();
+
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
 import { logInfo, logError } from './logger.js';
 
-dotenv.config();
 
 const app = express();
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css"
@@ -68,9 +69,9 @@ app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile, {customCss:
 //# Region S3
 AWS.config.update({
   region: process.env.REGION,
-  accessKeyId: process.env.ACCESS_KEY_ID,
-  secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  sessionToken: process.env.SESSION_TOKEN
+  //accessKeyId: process.env.ACCESS_KEY_ID,
+  //secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  //sessionToken: process.env.SESSION_TOKEN
 });
 
 const s3 = new AWS.S3();

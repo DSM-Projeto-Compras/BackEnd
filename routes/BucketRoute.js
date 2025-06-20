@@ -1,6 +1,8 @@
 import express from 'express';
 import multer from 'multer';
 import { getBucketByName, listBuckets, uploadFileToBucket, deleteFileFromBucket } from '../controllers/BucketsController.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
