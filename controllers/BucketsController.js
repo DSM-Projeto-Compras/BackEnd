@@ -1,3 +1,5 @@
+import { logInfo, logError } from "../logger";
+
 export const listBuckets = async (req, res) => {
     try {
         const data = await s3.listBuckets().promise();

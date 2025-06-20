@@ -97,4 +97,4 @@ function gerarLog(level, message, rota, extra) {
     };
 }
 
-export default { logInfo, logError, enviarLogCloudWatch, gerarLog };
+export { logInfo, logError, enviarLogCloudWatch, gerarLog };
