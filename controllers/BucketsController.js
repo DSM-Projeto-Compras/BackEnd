@@ -1,4 +1,4 @@
-import { logInfo, logError } from "../logger";
+import { logInfo, logError } from "../logger.js";
 
 export const listBuckets = async (req, res) => {
     try {
