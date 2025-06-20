@@ -47,14 +47,25 @@ async function enviarLogCloudWatch(message) {
         ],
         logGroupName: LOG_GROUP_NAME,
         logStreamName: LOG_STREAM_NAME,
-        sequenceToken,
     };
+
+    if(sequenceToken){
+        params.sequenceToken = sequenceToken;
+    }
 
     try {
         const response = await cloudwatchlogs.putLogEvents(params).promise();
         sequenceToken = response.nextSequenceToken;
         console.log('Log enviado com sucesso ' + new Date().toISOString());
     } catch (err) {
+        if(err.code === 'InvalidSequenceTokenException') { 
+            const streams = await cloudwatchlogs.describeLogStreams({
+                logGroupName: LOG_GROUP_NAME,
+                logStreamNamePrefix: LOG_STREAM_NAME,
+            }).promise();
+            sequenceToken = streams.logStreams[0].uploadSequenceToken;
+            return enviarLogCloudWatch(message);
+        }
         console.error('Erro ao enviar log:', err);
     }
 }
@@ -71,7 +82,7 @@ async function logError(message, req, error = {}, extra = {}) {
     const url = req !== null ? req?.originalUrl : '';
     let log = gerarLog('error', message, url, extra);
     if (error) {
-        log.error = {error}
+        log.error = error
     }
 
     await enviarLogCloudWatch(log);

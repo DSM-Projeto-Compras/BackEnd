@@ -11,6 +11,7 @@ import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
+import { logInfo, logError } from './logger.js';
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ app.use(cors({
 app.use(express.json())
 app.disable('x-powered-by')
 
+//Logger para AWS CloudWatch
+
+
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,7 +40,7 @@ app.use(express.static('public'));
 // Rotas
 app.get('/api', (req, res)=> {
   /* 
- * #swagger.tags = ['Default']
+ * #swagger.tags = ['Detalhes da API']
  * #swagger.summary = 'Rota default que retorna a versão da API'
  * #swagger.description = 'Endpoint que retorna a versão da API'    
  * #swagger.path = '/'
