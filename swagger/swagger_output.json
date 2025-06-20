@@ -5,7 +5,7 @@
     "title": "API Compras Fatec Votorantim",
     "description": ""
   },
-  "host": "projeto-mvc-restful-server.vercel.app",
+  "host": "projetocompras-backend.duckdns.org",
   "basePath": "/",
   "schemes": [
     "https"
@@ -28,7 +28,7 @@
     "/": {
       "get": {
         "tags": [
-          "Default"
+          "Detalhes da API"
         ],
         "summary": "Rota default que retorna a versão da API",
         "description": "Endpoint que retorna a versão da API",
@@ -41,7 +41,10 @@
     },
     "/api/logins/cadastro": {
       "post": {
-        "description": "",
+        "tags": [
+          "CRUD de Usuários"
+        ],
+        "description": "Rota para cadastro de usuários",
         "parameters": [
           {
             "name": "body",
@@ -77,7 +80,10 @@
     },
     "/api/logins/": {
       "post": {
-        "description": "",
+        "tags": [
+          "CRUD de Usuários"
+        ],
+        "description": "Rota para login de usuários",
         "parameters": [
           {
             "name": "body",

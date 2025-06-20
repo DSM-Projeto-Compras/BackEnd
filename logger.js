@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 AWS.config.update({
     region: process.env.REGION
 });
@@ -97,4 +97,4 @@ function gerarLog(level, message, rota, extra) {
     };
 }
 
-module.exports = { logInfo, logError };
+export default { logInfo, logError, enviarLogCloudWatch, gerarLog };

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { connectToDatabase } from './utils/mongodb.js';
 import LoginRoute from './routes/LoginRoute.js';
 import productRoutes from './routes/ProductRoute.js';
+import bucketRoute from './routes/BucketRoute.js';
 import cors from 'cors';
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
@@ -63,6 +64,18 @@ app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile, {customCss:
   '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
   customCssUrl: CSS_URL
 }));
+
+//# Region S3
+AWS.config.update({
+  region: process.env.REGION,
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  sessionToken: process.env.SESSION_TOKEN
+});
+
+const s3 = new AWS.S3();
+
+app.use('/api/buckets', bucketRoute);
 
 // Iniciar o servidor
 const PORT = process.env.PORT || 4000;
