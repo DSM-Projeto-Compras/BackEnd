@@ -44,7 +44,8 @@
         "tags": [
           "CRUD de Usuários"
         ],
-        "description": "Rota para cadastro de usuários",
+        "description": "",
+        "summary": "Rota para cadastrar um novo usuário",
         "parameters": [
           {
             "name": "body",
@@ -83,7 +84,8 @@
         "tags": [
           "CRUD de Usuários"
         ],
-        "description": "Rota para login de usuários",
+        "summary": "Rota para login de usuários",
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -122,7 +124,11 @@
     },
     "/api/products/": {
       "get": {
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para listar produtos",
         "responses": {
           "200": {
             "description": "OK"
@@ -136,7 +142,11 @@
         }
       },
       "post": {
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para criar um novo produto",
         "parameters": [
           {
             "name": "body",
@@ -170,7 +180,11 @@
         }
       },
       "put": {
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para atualizar um produto",
         "parameters": [
           {
             "name": "body",
@@ -209,7 +223,11 @@
     },
     "/api/products/{id}": {
       "delete": {
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para deletar um produto",
         "parameters": [
           {
             "name": "id",
@@ -236,7 +254,11 @@
     },
     "/api/products/all": {
       "get": {
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para listar todos os produtos",
         "responses": {
           "200": {
             "description": "OK"
@@ -249,7 +271,11 @@
     },
     "/api/products/aprove/{id}": {
       "put": {
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para aprovar um produto",
         "parameters": [
           {
             "name": "id",
@@ -279,6 +305,126 @@
           },
           "400": {
             "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/": {
+      "get": {
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para listar todos os buckets",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}": {
+      "get": {
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para listar os arquivos de um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}/upload": {
+      "post": {
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para upload de arquivos em um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado"
+          },
+          "400": {
+            "description": "Solicitação Inválida"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}/file/{fileName}": {
+      "delete": {
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para deletar um arquivo de um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          },
+          {
+            "name": "fileName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do arquivo",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "Sem Conteúdo"
           },
           "404": {
             "description": "Não Encontrado"
