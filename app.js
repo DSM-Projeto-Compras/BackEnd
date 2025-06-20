@@ -8,6 +8,10 @@ import cors from 'cors';
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
 
+import multer from 'multer';
+import multerS3 from 'multer-s3';
+import AWS from 'aws-sdk';
+
 dotenv.config();
 
 const app = express();
@@ -16,7 +20,11 @@ const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger
 // Conectar ao MongoDB
 connectToDatabase();
 
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: '*',
+}));
 app.use(express.json())
 app.disable('x-powered-by')
 
