@@ -7,10 +7,10 @@ const router = express.Router();
  * #swagger.summary = 'Rota para gerenciar logs do sistema'
  */
 
+router.get('/por-data', getLogsByDate);
 
 router.get('/', getLogs);
 router.get('/:id', getLogById);
-router.get('/data', getLogsByDate);
 router.delete('/:id', deleteLog);
 
 export default router

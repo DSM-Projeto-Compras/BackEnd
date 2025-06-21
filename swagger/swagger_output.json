@@ -475,6 +475,39 @@
         }
       }
     },
+    "/api/logs/por-data/": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Rota para listar logs por data",
+        "parameters": [
+          {
+            "name": "data_inicial",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Data inicial no formato YYYY-MM-DD"
+          },
+          {
+            "name": "data_final",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Data final no formato YYYY-MM-DD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
     "/api/logs/": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
@@ -493,7 +526,7 @@
         }
       }
     },
-    "api/logs/{id}": {
+    "/api/logs/{id}": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
         "tags": [

@@ -10,9 +10,6 @@ export async function saveLog(log) {
         );
     } catch (error) {
         console.error('Erro ao salvar log:', error);
-        res.status(500).send({
-            error: 'Erro ao salvar log'
-        });
     }
 }
 

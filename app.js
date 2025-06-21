@@ -56,7 +56,6 @@ app.get('/mysql/testar-conexao', testarConexaoMySQL);
 
 app.use('/api/logins', LoginRoute);
 app.use('/api/products', productRoutes);
-app.use('/api/buckets', bucketRoute);
 app.use('/api/logs', logsRoute);
 
 /* app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(JSON.parse(fs.readFileSync('./swagger/swagger_output.json')),{customCss:
