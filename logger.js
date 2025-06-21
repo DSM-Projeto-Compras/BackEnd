@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import { saveLog } from './controllers/LogsController';
 AWS.config.update({
     region: process.env.REGION
 });
@@ -75,6 +76,7 @@ async function logInfo(message, req, extra = {}) {
     const log = gerarLog('info', message, req.originalUrl, extra);
 
     await enviarLogCloudWatch(log);
+    await saveLog(log);
 }
 
 //Logar erro
@@ -86,6 +88,7 @@ async function logError(message, req, error = {}, extra = {}) {
     }
 
     await enviarLogCloudWatch(log);
+    await saveLog(log);
 }
 
 function gerarLog(level, message, rota, extra) {

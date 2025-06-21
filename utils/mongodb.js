@@ -26,8 +26,12 @@ export const connectToDatabase = async () => {
             useUnifiedTopology: true,
         });
         console.log('Conectado ao MongoDB');
+        res.status(200).send('Conexão com o MongoDB bem-sucedida!');
     } catch (err) {
         console.error('Erro ao conectar ao MongoDB', err);
+        res.status(500).send('Erro na conexão com o MongoDB');
         process.exit(1);
+    } finally {
+        mongoose.connection.close();
     }
 };

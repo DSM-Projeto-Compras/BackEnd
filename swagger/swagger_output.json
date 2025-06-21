@@ -440,6 +440,80 @@
           }
         }
       }
+    },
+    "/api/logs/": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "description": "Realize qualquer ação CRUD para gerar logs",
+        "summary": "Rota para listar logs",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "api/logs/{id}": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "description": "",
+        "summary": "Rota para buscar um log específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      },
+      "delete": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "description": "",
+        "summary": "Rota para deletar um log específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
     }
   },
   "definitions": {
