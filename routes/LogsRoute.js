@@ -1,5 +1,5 @@
 import express from 'express';
-import { getLogs, deleteLog } from '../controllers/LogsController.js';
+import { getLogs, deleteLog, getLogById, getLogsByDate } from '../controllers/LogsController.js';
 
 const router = express.Router();
 /* 
@@ -9,6 +9,8 @@ const router = express.Router();
 
 
 router.get('/', getLogs);
+router.get('/:id', getLogById);
+router.get('/data', getLogsByDate);
 router.delete('/:id', deleteLog);
 
 export default router
