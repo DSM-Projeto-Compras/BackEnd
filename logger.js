@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import { saveLog } from './controllers/LogsController';
+import { saveLog } from './controllers/LogsController.js';
 AWS.config.update({
     region: process.env.REGION
 });
