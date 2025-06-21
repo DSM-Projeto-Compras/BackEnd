@@ -1,22 +1,20 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import { connectToDatabase } from './utils/mongodb.js';
+import cors from 'cors';
+
+import { connectToDatabase, testarConexaoMongo } from './utils/mongodb.js';
+import { testarConexaoMySQL } from './utils/mysql.js';
+
 import LoginRoute from './routes/LoginRoute.js';
 import productRoutes from './routes/ProductRoute.js';
 import bucketRoute from './routes/BucketRoute.js';
 import logsRoute from './routes/LogsRoute.js';
-import cors from 'cors';
+
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
 
 dotenv.config();
-
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-import AWS from 'aws-sdk';
-import { logInfo, logError } from './logger.js';
-
 
 const app = express();
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css"
@@ -53,7 +51,8 @@ app.get('/api', (req, res)=> {
  })
 })
 
-app.get('/mongodb/testar-conexao', connectToDatabase());
+app.get('/mongodb/testar-conexao', testarConexaoMongo);
+app.get('/mysql/testar-conexao', testarConexaoMySQL);
 
 app.use('/api/logins', LoginRoute);
 app.use('/api/products', productRoutes);

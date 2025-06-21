@@ -21,12 +21,22 @@ export const getConnection = () => {
         pool.getConnection((err, connection) => {
             if (err) {
                 console.error('Erro ao obter conexão:', err);
-                res.status(500).send('Erro ao obter conexão com o banco de dados');
                 reject(err);
             } else {
                 resolve(connection);
-                res.status(200).send('Conexão com o banco de dados MySQL bem-sucedida');
             }
         });
     });
+}
+
+export const testarConexaoMySQL = async (req, res) => {
+    try {
+        const connection = await getConnection();
+        await connection.query(`USE \`${DB_NAME}\``);
+        res.status(200).json({ message: 'Conexão com MySQL bem-sucedida' });
+        connection.release();
+    } catch (error) {
+        console.error('Erro ao conectar ao MySQL:', error);
+        res.status(500).json({ error: 'Erro ao conectar ao MySQL', details: error.message });
+    }
 }
