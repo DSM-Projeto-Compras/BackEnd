@@ -374,6 +374,7 @@
     },
     "/api/buckets/{bucketName}": {
       "get": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "Buckets"
         ],
@@ -403,6 +404,7 @@
     },
     "/api/buckets/{bucketName}/upload": {
       "post": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "Buckets"
         ],
@@ -438,6 +440,7 @@
     },
     "/api/buckets/{bucketName}/file/{fileName}": {
       "delete": {
+        "security": [{ "apiKeyAuth": [] }],
         "tags": [
           "Buckets"
         ],
