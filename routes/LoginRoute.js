@@ -27,6 +27,6 @@ router.post("/cadastro-admin", authAdmin, validaCadastroAdmin, registerAdmin);
 router.delete("/usuario/:id", authAdmin, validaDeleteUser, deleteUser);
 router.post("/forgot", validaForgotPassword, forgotPassword);
 router.post("/verify", validaVerifyCode, verifyCode);
-router.post("/reset", validaResetPassword, resetPassword);
+router.patch("/reset", validaResetPassword, resetPassword);
 
 export default router;

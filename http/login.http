@@ -185,7 +185,7 @@ Content-Type: application/json
 
 ###
 # Teste de erro - código expirado (após 15 minutos)
-POST {{baseURL}}/verify
+PATCH {{baseURL}}/verify
 Content-Type: application/json
 
 {
