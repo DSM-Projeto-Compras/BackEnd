@@ -15,10 +15,14 @@ import { logInfo, logError } from "../logger.js";
 
 
 export const listBuckets = async (req, res) => {
+
+    const bucketsPermitidos = ['projetocompras-dsm-prod', 'projetocompras-dsm-hml']
+
     try {
         const data = await s3.listBuckets().promise();
-        logInfo('Buckets encontrados', req, data.Buckets);
-        res.status(200).json(data.Buckets);
+        const bucketsFiltrados = data.Buckets.filter(bucket => bucketsPermitidos.includes(bucket.Name));
+        logInfo('Buckets encontrados', req, bucketsFiltrados);
+        res.status(200).json(bucketsFiltrados);
     } catch (error) {
         logError("Erro ao buscar buckets", req, error);
         res.status(500).json({ error: 'Erro ao listar buckets', details: error });
