@@ -7,7 +7,7 @@ dotenv.config();
 
 const router = express.Router();
 
-router.get('/', authAdmin, listBuckets);
+router.get('/', listBuckets);
 
 router.get('/:bucketName', authAdmin, getBucketByName);
 
