@@ -13,6 +13,11 @@ import authAdmin from "../middlewares/authAdmin.js";
 
 const router = express.Router();
 
+/* 
+ * #swagger.tags = ['CRUD de Produtos']
+ * #swagger.summary = 'Rota para gerenciamento de produtos'
+ */
+
 router.get("/", auth, getProductByUserId);
 router.post("/", auth, validaProduto, createProduct);
 router.delete("/:id", auth, deleteProduct);

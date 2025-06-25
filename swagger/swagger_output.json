@@ -5,10 +5,10 @@
     "title": "API Compras Fatec Votorantim",
     "description": ""
   },
-  "host": "projeto-mvc-restful-server.vercel.app",
+  "host": "projetocompras-backend.duckdns.org:3000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "securityDefinitions": {
     "apiKeyAuth": {
@@ -25,10 +25,10 @@
     "application/json"
   ],
   "paths": {
-    "/": {
+    "/api/": {
       "get": {
         "tags": [
-          "Default"
+          "Conexões"
         ],
         "summary": "Rota default que retorna a versão da API",
         "description": "Endpoint que retorna a versão da API",
@@ -39,9 +39,47 @@
         }
       }
     },
+    "/mongodb/testar-conexao": {
+      "get": {
+        "tags": [
+          "Conexões"
+        ],
+        "summary": "Rota que testa a conexão com o MongoDB",
+        "description": "Endpoint que retorna a conexão com o MongoDB",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/mysql/testar-conexao": {
+      "get": {
+        "tags": [
+          "Conexões"
+        ],
+        "summary": "Rota que testa a conexão com o RDS MySQL",
+        "description": "Endpoint que retorna a conexão com o MySQL",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
     "/api/logins/cadastro": {
       "post": {
+        "tags": [
+          "CRUD de Usuários"
+        ],
         "description": "",
+        "summary": "Rota para cadastrar um novo usuário",
         "parameters": [
           {
             "name": "body",
@@ -77,6 +115,10 @@
     },
     "/api/logins/": {
       "post": {
+        "tags": [
+          "CRUD de Usuários"
+        ],
+        "summary": "Rota para login de usuários",
         "description": "",
         "parameters": [
           {
@@ -116,7 +158,12 @@
     },
     "/api/products/": {
       "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para listar produtos",
         "responses": {
           "200": {
             "description": "OK"
@@ -130,7 +177,12 @@
         }
       },
       "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para criar um novo produto",
         "parameters": [
           {
             "name": "body",
@@ -164,7 +216,12 @@
         }
       },
       "put": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para atualizar um produto",
         "parameters": [
           {
             "name": "body",
@@ -203,7 +260,12 @@
     },
     "/api/products/{id}": {
       "delete": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para deletar um produto",
         "parameters": [
           {
             "name": "id",
@@ -230,7 +292,12 @@
     },
     "/api/products/all": {
       "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para listar todos os produtos",
         "responses": {
           "200": {
             "description": "OK"
@@ -243,7 +310,12 @@
     },
     "/api/products/aprove/{id}": {
       "put": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "CRUD de Produtos"
+        ],
         "description": "",
+        "summary": "Rota para aprovar um produto",
         "parameters": [
           {
             "name": "id",
@@ -273,6 +345,236 @@
           },
           "400": {
             "description": "Solicitação Inválida"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/": {
+      "get": {
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para listar todos os buckets",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para listar os arquivos de um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}/upload": {
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para upload de arquivos em um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado"
+          },
+          "400": {
+            "description": "Solicitação Inválida"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}/file/{fileName}": {
+      "delete": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Buckets"
+        ],
+        "description": "",
+        "summary": "Rota para deletar um arquivo de um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          },
+          {
+            "name": "fileName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do arquivo",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "Sem Conteúdo"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/logs/por-data/": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Rota para listar logs por data",
+        "parameters": [
+          {
+            "name": "data_inicial",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Data inicial no formato YYYY-MM-DD"
+          },
+          {
+            "name": "data_final",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Data final no formato YYYY-MM-DD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/logs/": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "description": "Realize qualquer ação CRUD para gerar logs",
+        "summary": "Rota para listar logs",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/logs/{id}": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "description": "",
+        "summary": "Rota para buscar um log específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      },
+      "delete": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": [
+          "Logs"
+        ],
+        "description": "",
+        "summary": "Rota para deletar um log específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "Não Encontrado"
