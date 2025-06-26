@@ -7,6 +7,8 @@ import {
   forgotPassword,
   verifyCode,
   resetPassword,
+  getAdmins,
+  getMe,
 } from "../controllers/LoginController.js";
 import {
   validaCadastro,
@@ -21,6 +23,8 @@ import authAdmin from "../middlewares/authAdmin.js";
 
 const router = express.Router();
 
+router.get("/", authAdmin, getAdmins);
+router.get("/me", authAdmin, getMe);
 router.post("/cadastro", validaCadastro, register);
 router.post("/", validaLogin, login);
 router.post("/cadastro-admin", authAdmin, validaCadastroAdmin, registerAdmin);
