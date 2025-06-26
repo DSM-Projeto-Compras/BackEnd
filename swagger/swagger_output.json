@@ -5,7 +5,7 @@
     "title": "API Compras Fatec Votorantim",
     "description": ""
   },
-  "host": "projetocompras-backend.duckdns.org:3000",
+  "host": "projetocompras-backend.duckdns.org",
   "basePath": "/",
   "schemes": [
     "http"
