@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - master
+      - feat/aws
   pull_request:
     branches:
       - master
+      - feat/aws
 
 jobs:
   build:
@@ -173,7 +175,7 @@ jobs:
           git add package.json
           git commit -m "chore(release): version $new_version"
           git tag v$new_version
-          git push origin master --tags
+          git push origin feat/aws --tags
 
   deploy:
     runs-on: ubuntu-latest
