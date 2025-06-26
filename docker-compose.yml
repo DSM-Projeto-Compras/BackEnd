@@ -1,18 +1,39 @@
 version: "3.8"
 
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - backend
+    networks:
+      - rede_compras
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME}/backend:latest
+    container_name: backend
     ports:
       - "4000:4000"
-    volumes:
-      - .:/BackEnd
-      - /BackEnd/node_modules
+      - "3000:3000"
     working_dir: /BackEnd
     environment:
       - MONGO_URI=${MONGODB_URI}
+    networks:
+      - rede_compras
+    
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
       - rede_compras
 
@@ -27,9 +48,13 @@ services:
       - 27017:27017
     environment:
       # Definir o usuário e senha do banco de dados
-      - MONGO_INITDB_ROOT_USERNAME=thiagodiegoli
-      - MONGO_INITDB_ROOT_PASSWORD=pdgjoxtuGQACsPmy
+      #- MONGO_INITDB_ROOT_USERNAME=thiagodiegoli
+      #- MONGO_INITDB_ROOT_PASSWORD=pdgjoxtuGQACsPmy
       - MONGO_INITDB_DATABASE=${MONGODB_DB}
+      - MONGO_INITDB_ROOT_USERNAME=admin # Comentar quando não for pela aws
+      - MONGO_INITDB_ROOT_PASSWORD=adminfatec # Comentar quando não for pela aws
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_DB=${MONGODB_DB}
 
 volumes:
   mongo_data:
