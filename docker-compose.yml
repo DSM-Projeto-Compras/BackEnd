@@ -1,21 +1,39 @@
 version: "3.8"
 
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  nginx:
+    image: nginx:latest
+    container_name: nginx
     ports:
-      - "3000:3000"
-      - "4000:4000"
       - "80:80"
       - "443:443"
     volumes:
-      - .:/BackEnd
-      - /BackEnd/node_modules
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - backend
+    networks:
+      - rede_compras
+  backend:
+    image: ${DOCKERHUB_USERNAME}/backend:latest
+    container_name: backend
+    ports:
+      - "4000:4000"
+      - "3000:3000"
     working_dir: /BackEnd
     environment:
       - MONGO_URI=${MONGODB_URI}
+    networks:
+      - rede_compras
+    
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
       - rede_compras
 
