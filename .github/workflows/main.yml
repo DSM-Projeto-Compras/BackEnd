@@ -261,4 +261,6 @@ jobs:
               -e REGION="${{ secrets.REGION }}" \
               -e LOG_GROUP_NAME="${{ secrets.LOG_GROUP_NAME }}" \
               -e LOG_STREAM_NAME="${{ secrets.LOG_STREAM_NAME }}" \
+              -e MONGODB_URI=${{ secrets.MONGODB_URI}} \
+              -e MONGODB_DB=${{ secrets.MONGODB_DB }} \
               --name $REPO_NAME $IMAGE
