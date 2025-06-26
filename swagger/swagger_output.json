@@ -8,7 +8,7 @@
   "host": "projetocompras-backend.duckdns.org",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "securityDefinitions": {
     "apiKeyAuth": {
