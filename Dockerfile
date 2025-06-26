@@ -2,7 +2,7 @@
 FROM node:20
 
 # Diretório dos arquivos no container
-WORKDIR /BackEnd
+WORKDIR /app
 
 # Atualiza o bcrypt
 RUN npm rebuild bcrypt --build-from-source
@@ -24,7 +24,7 @@ COPY . .
 #ENV MONGODB_INITDB_DATABASE=projetocompras
 
 # Porta exposta em que a aplicação roda
-EXPOSE 4000
+EXPOSE 3000
 
 # Comando utilizado para iniciar a aplicação
 CMD [ "node", "--no-warnings", "app.js" ]

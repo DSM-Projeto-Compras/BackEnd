@@ -19,7 +19,6 @@ if (!MONGODB_DB) {
 
 export const connectToDatabase = async () => {
     try {
-        // Remover barra final, se existir, em MONGODB_URI para evitar duplicidade de barras
         const uri = `${MONGODB_URI.replace(/\/$/, '')}/${MONGODB_DB}`;
         await mongoose.connect(uri, {
             useNewUrlParser: true,
@@ -28,6 +27,16 @@ export const connectToDatabase = async () => {
         console.log('Conectado ao MongoDB');
     } catch (err) {
         console.error('Erro ao conectar ao MongoDB', err);
-        process.exit(1);
+        throw err;
     }
 };
+
+export const testarConexaoMongo = async (req, res) => {
+    try {
+        await connectToDatabase();
+        res.status(200).json({ message: 'Conexão com MongoDB bem-sucedida' });
+    } catch (error) {
+        console.error('Erro ao conectar ao MongoDB:', error);
+        res.status(500).json({ error: 'Erro ao conectar ao MongoDB', details: error });
+    }
+}
