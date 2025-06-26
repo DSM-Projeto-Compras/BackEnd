@@ -259,8 +259,8 @@ jobs:
               -e REGION="${{ secrets.REGION }}" \
               -e LOG_GROUP_NAME="${{ secrets.LOG_GROUP_NAME }}" \
               -e LOG_STREAM_NAME="${{ secrets.LOG_STREAM_NAME }}" \
-              -e MONGODB_URI="${{ secrets.MONGODB_URI}}" \
               -e MONGODB_DB="${{ secrets.MONGODB_DB }}" \
+              -e SECRET_KEY="${{ secrets.SECRET_KEY }}" \
               -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro \
               -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/privkey.pem:/etc/nginx/certs/privkey.pem:ro \
               --name $REPO_NAME $IMAGE

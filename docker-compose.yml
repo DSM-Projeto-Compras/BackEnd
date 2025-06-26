@@ -24,6 +24,7 @@ services:
     working_dir: /BackEnd
     environment:
       - MONGO_URI=${MONGODB_URI}
+      - SECRET_KEY=${SECRET_KEY}
     networks:
       - rede_compras
     
