@@ -90,9 +90,9 @@ services:
   #   networks:
   #     - rede_compras
 
-networks:
-  rede_compras:
-    driver: bridge
+# networks:
+#   rede_compras:
+#     driver: bridge
 
 volumes:
   mongo_data:

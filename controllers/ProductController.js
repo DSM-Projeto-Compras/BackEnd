@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator';
 import Product from '../models/ProductModel.js';
 
-import { logInfo, logError } from '../logger.js';
+// import { logInfo, logError } from '../logger.js';
 
 export const getProducts = async (req, res) => {
   try {
@@ -49,11 +49,11 @@ export const createProduct = async (req, res) => {
 
     await product.save();
 
-    //salvando o log de sucesso no mysql
-    await logInfo('Produto criado com sucesso', req, { body: req.body, user: req.user?.id});
-    res.status(201).json(product);
+    // //salvando o log de sucesso no mysql
+    // await logInfo('Produto criado com sucesso', req, { body: req.body, user: req.user?.id});
+    // res.status(201).json(product);
   } catch (err) {
-    await logError('Erro ao criar produto', req, err, { body: req.body, user: req.user?.id });
+    // await logError('Erro ao criar produto', req, err, { body: req.body, user: req.user?.id });
     res.status(500).json({ message: 'Erro no servidor', error: err.message });
   }
 };
@@ -92,20 +92,20 @@ export const updateProduct = async (req, res) => {
     }
     if (req.body.status != null){
       if (product.status != req.body.status) {
-        await logError('Tentativa de atualização de status do produto', req, { body: req.body, user: req.user?.id });
+        // await logError('Tentativa de atualização de status do produto', req, { body: req.body, user: req.user?.id });
         return res.status(403).json({ message: 'Você não tem permissão para atualizar os status do produto' });
       }
     }
     if (product.userId.toString() !== req.user.userId.toString()) {
-      await logError('Usuário não autorizado a atualizar o produto', req, { body: req.body, user: req.user?.id });
+      // await logError('Usuário não autorizado a atualizar o produto', req, { body: req.body, user: req.user?.id });
       return res.status(403).json({ message: 'Você não tem permissão para atualizar este produto' });
     }
 
     await Product.findByIdAndUpdate(idDocumento, req.body, { new: true });
-    await logInfo('Produto atualizado com sucesso', req, { body: req.body, user: req.user?.id });
+    // await logInfo('Produto atualizado com sucesso', req, { body: req.body, user: req.user?.id });
     res.status(202).json(product);
   } catch (err) {
-    await logError('Erro ao atualizar produto', req, err, { body: req.body, user: req.user?.id });
+    // await logError('Erro ao atualizar produto', req, err, { body: req.body, user: req.user?.id });
     res.status(500).json({ message: 'Erro no servidor', error: err.message });
   }
 };
@@ -137,10 +137,10 @@ export const updateProductStatus = async (req, res) => {
     }
 
     await product.save();
-    await logInfo('Status do produto atualizado com sucesso', req, { body: req.body, user: req.user?.id });
+    // await logInfo('Status do produto atualizado com sucesso', req, { body: req.body, user: req.user?.id });
     res.status(200).json({ message: 'Status do produto atualizado com sucesso', product });
   } catch (err) {
-    await logError('Erro ao atualizar status do produto', req, err, { body: req.body, user: req.user?.id });
+    // await logError('Erro ao atualizar status do produto', req, err, { body: req.body, user: req.user?.id });
     res.status(500).json({ message: 'Erro ao atualizar o status do produto', error: err.message });
   }
 };

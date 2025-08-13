@@ -4,12 +4,12 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 import { connectToDatabase, testarConexaoMongo } from './utils/mongodb.js';
-import { testarConexaoMySQL } from './utils/mysql.js';
+// import { testarConexaoMySQL } from './utils/mysql.js'; //aws
 
 import LoginRoute from './routes/LoginRoute.js';
 import productRoutes from './routes/ProductRoute.js';
-import bucketRoute from './routes/BucketRoute.js';
-import logsRoute from './routes/LogsRoute.js';
+// import bucketRoute from './routes/BucketRoute.js';
+// import logsRoute from './routes/LogsRoute.js';
 
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
@@ -52,11 +52,11 @@ app.get('/api', (req, res)=> {
 })
 
 app.get('/mongodb/testar-conexao', testarConexaoMongo);
-app.get('/mysql/testar-conexao', testarConexaoMySQL);
+// app.get('/mysql/testar-conexao', testarConexaoMySQL); //aws
 
 app.use('/api/logins', LoginRoute);
 app.use('/api/products', productRoutes);
-app.use('/api/logs', logsRoute);
+// app.use('/api/logs', logsRoute); //aws
 
 /* app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(JSON.parse(fs.readFileSync('./swagger/swagger_output.json')),{customCss:
   '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
@@ -68,10 +68,10 @@ app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile, {customCss:
 }));
 
 //# Region S3 configurada no BucketController.js
-app.use('/api/buckets', bucketRoute);
+// app.use('/api/buckets', bucketRoute); 
 
 // Iniciar o servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

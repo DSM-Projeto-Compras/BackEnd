@@ -2,6 +2,8 @@ import express from 'express';
 import { getLogs, deleteLog, getLogById, getLogsByDate } from '../controllers/LogsController.js';
 import authAdmin from '../middlewares/authAdmin.js';
 
+//aws
+
 const router = express.Router();
 /* 
  * #swagger.tags = ['Logs']

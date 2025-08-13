@@ -5,10 +5,10 @@
     "title": "API Compras Fatec Votorantim",
     "description": ""
   },
-  "host": "projetocompras-backend.duckdns.org",
+  "host": "localhost:4000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "securityDefinitions": {
     "apiKeyAuth": {
