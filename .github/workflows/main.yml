@@ -215,56 +215,58 @@ jobs:
       #    CONTAINER="docker run -d -p 80:80 --name $REPO_NAME ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:${{ needs.build.outputs.new_version }}"
       #    echo "✅ Imagem completa: $CONTAINER"
 
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            REPO_NAME="${{ needs.build.outputs.repo_name }}"
-            VERSION="${{ needs.build.outputs.new_version }}"
-            IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:$VERSION"
+      # AWS --------------------------------------------------------
 
-            echo "🔄 Iniciando deploy da imagem: $IMAGE"
+      #  - name: Deploy to EC2 via SSH
+      #    uses: appleboy/ssh-action@v0.1.5
+      #    with:
+      #      host: ${{ secrets.EC2_HOST }}
+      #      username: ${{ secrets.EC2_USER }}
+      #      key: ${{ secrets.EC2_PRIVATE_KEY }}
+      #      script: |
+      #        REPO_NAME="${{ needs.build.outputs.repo_name }}"
+      #        VERSION="${{ needs.build.outputs.new_version }}"
+      #        IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:$VERSION"
 
-            # Garantir que o Docker esteja disponível
-            sudo yum update -y || sudo apt update -y
-            sudo systemctl start docker || sudo service docker start
+      #        echo "🔄 Iniciando deploy da imagem: $IMAGE"
 
-            # Verificar container existente
-            CONTAINER_ID=$(docker ps -q --filter "name=$REPO_NAME")
-            # Remover qualquer container (rodando ou parado) com o nome
-            if docker ps -a --format '{{.Names}}' | grep -Eq "^$REPO_NAME$"; then
-              echo "🛑 Removendo container existente (rodando ou parado)..."
-              docker rm -f $REPO_NAME || true
-            else
-              echo "ℹ️ Nenhum container (rodando ou parado) encontrado com nome: $REPO_NAME"
-            fi
+      #        # Garantir que o Docker esteja disponível
+      #        sudo yum update -y || sudo apt update -y
+      #        sudo systemctl start docker || sudo service docker start
 
-            echo "🧹 Removendo imagem local antiga, se existir..."
-            docker rmi -f "$IMAGE" || echo "ℹ️ Nenhuma imagem antiga encontrada com a tag: $IMAGE"
+      #        # Verificar container existente
+      #        CONTAINER_ID=$(docker ps -q --filter "name=$REPO_NAME")
+      #        # Remover qualquer container (rodando ou parado) com o nome
+      #        if docker ps -a --format '{{.Names}}' | grep -Eq "^$REPO_NAME$"; then
+      #          echo "🛑 Removendo container existente (rodando ou parado)..."
+      #          docker rm -f $REPO_NAME || true
+      #        else
+      #          echo "ℹ️ Nenhum container (rodando ou parado) encontrado com nome: $REPO_NAME"
+      #        fi
 
-            echo "⬇️ Baixando nova imagem..."
-            docker pull $IMAGE
+      #        echo "🧹 Removendo imagem local antiga, se existir..."
+      #        docker rmi -f "$IMAGE" || echo "ℹ️ Nenhuma imagem antiga encontrada com a tag: $IMAGE"
 
-            echo "🚀 Subindo novo container... $REPO_NAME $IMAGE"
-            docker run -d -p 3000:3000 \
-              -e MONGODB_URI="${{ secrets.MONGODB_URI }}" \
-              -e DB_HOST="${{ secrets.DB_HOST }}" \
-              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              -e DB_USER="${{ secrets.DB_USER }}" \
-              -e DB_NAME="${{ secrets.DB_NAME }}" \
-              -e DB_PORT="${{ secrets.DB_PORT }}" \
-              -e REGION="${{ secrets.REGION }}" \
-              -e LOG_GROUP_NAME="${{ secrets.LOG_GROUP_NAME }}" \
-              -e LOG_STREAM_NAME="${{ secrets.LOG_STREAM_NAME }}" \
-              -e MONGODB_DB="${{ secrets.MONGODB_DB }}" \
-              -e SECRET_KEY="${{ secrets.SECRET_KEY }}" \
-              -e EXPIRES_IN="${{ secrets.EXPIRES_IN }}" \
-              -e PORT="${{ secrets.PORT }}" \
-              -e MAILTRAP_USER="${{ secrets.MAILTRAP_USER }}" \
-              -e MAILTRAP_PASS="${{ secrets.MAILTRAP_PASS }}" \
-              -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro \
+      #        echo "⬇️ Baixando nova imagem..."
+      #        docker pull $IMAGE
+
+      #        echo "🚀 Subindo novo container... $REPO_NAME $IMAGE"
+      #        docker run -d -p 3000:3000 \
+      #          -e MONGODB_URI="${{ secrets.MONGODB_URI }}" \
+      #          -e DB_HOST="${{ secrets.DB_HOST }}" \
+      #          -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+      #          -e DB_USER="${{ secrets.DB_USER }}" \
+      #          -e DB_NAME="${{ secrets.DB_NAME }}" \
+      #          -e DB_PORT="${{ secrets.DB_PORT }}" \
+      #          -e REGION="${{ secrets.REGION }}" \
+      #          -e LOG_GROUP_NAME="${{ secrets.LOG_GROUP_NAME }}" \
+      #          -e LOG_STREAM_NAME="${{ secrets.LOG_STREAM_NAME }}" \
+      #          -e MONGODB_DB="${{ secrets.MONGODB_DB }}" \
+      #          -e SECRET_KEY="${{ secrets.SECRET_KEY }}" \
+      #          -e EXPIRES_IN="${{ secrets.EXPIRES_IN }}" \
+      #          -e PORT="${{ secrets.PORT }}" \
+      #          -e MAILTRAP_USER="${{ secrets.MAILTRAP_USER }}" \
+      #          -e MAILTRAP_PASS="${{ secrets.MAILTRAP_PASS }}" \
+      #          -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro \
               -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/privkey.pem:/etc/nginx/certs/privkey.pem:ro \
               --name $REPO_NAME $IMAGE
