@@ -198,22 +198,22 @@ jobs:
           IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:${{ needs.build.outputs.new_version }}"
           echo "Imagem completa: $IMAGE"
 
-      #- name: Debug de variáveis
-      #  run: |
-      #    echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}"
-      #    echo "REPO_NAME=$REPO_NAME"
-      #    echo "NEW_VERSION=${{ needs.build.outputs.new_version }}"
-#
-      #    if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "$REPO_NAME" ] || [ -z "${{ needs.build.outputs.new_version }}" ]; then
-      #      echo "❌ Uma ou mais variáveis estão vazias!"
-      #      exit 1
-      #    fi
-#
-      #    IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:${{ needs.build.outputs.new_version }}"
-      #    echo "✅ Imagem completa: $IMAGE"
-#
-      #    CONTAINER="docker run -d -p 80:80 --name $REPO_NAME ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:${{ needs.build.outputs.new_version }}"
-      #    echo "✅ Imagem completa: $CONTAINER"
+      - name: Debug de variáveis
+        run: |
+          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}"
+          echo "REPO_NAME=$REPO_NAME"
+          echo "NEW_VERSION=${{ needs.build.outputs.new_version }}"
+
+          if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "$REPO_NAME" ] || [ -z "${{ needs.build.outputs.new_version }}" ]; then
+            echo "❌ Uma ou mais variáveis estão vazias!"
+            exit 1
+          fi
+
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:${{ needs.build.outputs.new_version }}"
+          echo "✅ Imagem completa: $IMAGE"
+
+          CONTAINER="docker run -d -p 80:80 --name $REPO_NAME ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:${{ needs.build.outputs.new_version }}"
+          echo "✅ Imagem completa: $CONTAINER"
 
       # AWS --------------------------------------------------------
 
