@@ -5,7 +5,7 @@
     "title": "API Compras Fatec Votorantim",
     "description": ""
   },
-  "host": "projeto-mvc-restful-server.vercel.app",
+  "host": "back-end-three-lyart.vercel.app",
   "basePath": "/",
   "schemes": [
     "https"

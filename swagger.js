@@ -3,10 +3,10 @@ import swaggerAutogen from 'swagger-autogen'
 const doc = {
     swagger: "2.0",
     info: {
-        version: "1.0.0",
+        version: "3.0.0",
         title: "API Compras Fatec Votorantim"
     },
-    host: 'projeto-mvc-restful-server.vercel.app',
+    host: 'back-end-three-lyart.vercel.app',
     basePath: "/",
     schemes: ['https'],
     consumes: ['application/json'],
