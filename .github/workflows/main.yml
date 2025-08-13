@@ -268,5 +268,5 @@ jobs:
       #          -e MAILTRAP_USER="${{ secrets.MAILTRAP_USER }}" \
       #          -e MAILTRAP_PASS="${{ secrets.MAILTRAP_PASS }}" \
       #          -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro \
-              -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/privkey.pem:/etc/nginx/certs/privkey.pem:ro \
-              --name $REPO_NAME $IMAGE
+      #        -v /etc/letsencrypt/live/projetocompras-backend.duckdns.org/privkey.pem:/etc/nginx/certs/privkey.pem:ro \
+      #        --name $REPO_NAME $IMAGE
