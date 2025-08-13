@@ -24,7 +24,7 @@ COPY . .
 #ENV MONGODB_INITDB_DATABASE=projetocompras
 
 # Porta exposta em que a aplicação roda
-EXPOSE 3000
+EXPOSE 4000
 
 # Comando utilizado para iniciar a aplicação
 CMD [ "node", "--no-warnings", "app.js" ]
