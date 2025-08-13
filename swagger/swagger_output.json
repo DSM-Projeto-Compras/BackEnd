@@ -5,10 +5,10 @@
     "title": "API Compras Fatec Votorantim",
     "description": ""
   },
-  "host": "localhost:4000",
+  "host": "projeto-mvc-restful-server.vercel.app",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "securityDefinitions": {
     "apiKeyAuth": {
