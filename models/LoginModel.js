@@ -1,13 +1,63 @@
-import mongoose from "mongoose";
+import prisma from "../utils/database.js";
 
-const userSchema = new mongoose.Schema({
-  nome: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  senha: { type: String, required: true },
-  cargo: { type: String, enum: ["user", "admin"], default: "user" },
-  dataCriacao: { type: Date, default: Date.now },
-  codigoEmail: { type: String },
-  codigoExp: { type: Date },
-});
+// User model usando Prisma Client
+const User = {
+  // Criar usuário
+  async create(userData) {
+    return await prisma.user.create({
+      data: userData
+    });
+  },
 
-export default mongoose.model("User", userSchema);
+  // Buscar usuário por email
+  async findOne(where) {
+    return await prisma.user.findFirst({
+      where
+    });
+  },
+
+  // Buscar usuário por ID
+  async findById(id) {
+    return await prisma.user.findUnique({
+      where: { id }
+    });
+  },
+
+  // Atualizar usuário
+  async findByIdAndUpdate(id, updateData) {
+    return await prisma.user.update({
+      where: { id },
+      data: updateData
+    });
+  },
+
+  // Deletar usuário
+  async findByIdAndDelete(id) {
+    return await prisma.user.delete({
+      where: { id }
+    });
+  },
+
+  // Buscar todos os usuários
+  async find(where = {}) {
+    return await prisma.user.findMany({
+      where
+    });
+  },
+
+  // Salvar (compatibilidade com código existente)
+  async save() {
+    if (this.id) {
+      return await prisma.user.update({
+        where: { id: this.id },
+        data: this
+      });
+    } else {
+      return await prisma.user.create({
+        data: this
+      });
+    }
+  }
+};
+
+export default User;
