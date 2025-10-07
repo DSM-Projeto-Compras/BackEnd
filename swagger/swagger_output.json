@@ -7,9 +7,7 @@
   },
   "host": "back-end-three-lyart.vercel.app",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "securityDefinitions": {
     "apiKeyAuth": {
       "type": "apiKey",
@@ -18,18 +16,12 @@
       "description": "Token de Acesso gerado após o login"
     }
   },
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/api/": {
       "get": {
-        "tags": [
-          "Conexões"
-        ],
+        "tags": ["Conexões"],
         "summary": "Rota default que retorna a versão da API",
         "description": "Endpoint que retorna a versão da API",
         "responses": {
@@ -41,9 +33,7 @@
     },
     "/mongodb/testar-conexao": {
       "get": {
-        "tags": [
-          "Conexões"
-        ],
+        "tags": ["Conexões"],
         "summary": "Rota que testa a conexão com o MongoDB",
         "description": "Endpoint que retorna a conexão com o MongoDB",
         "responses": {
@@ -58,9 +48,7 @@
     },
     "/mysql/testar-conexao": {
       "get": {
-        "tags": [
-          "Conexões"
-        ],
+        "tags": ["Conexões"],
         "summary": "Rota que testa a conexão com o RDS MySQL",
         "description": "Endpoint que retorna a conexão com o MySQL",
         "responses": {
@@ -75,9 +63,7 @@
     },
     "/api/logins/cadastro": {
       "post": {
-        "tags": [
-          "CRUD de Usuários"
-        ],
+        "tags": ["CRUD de Usuários"],
         "description": "",
         "summary": "Rota para cadastrar um novo usuário",
         "parameters": [
@@ -115,9 +101,7 @@
     },
     "/api/logins/": {
       "post": {
-        "tags": [
-          "CRUD de Usuários"
-        ],
+        "tags": ["CRUD de Usuários"],
         "summary": "Rota para login de usuários",
         "description": "",
         "parameters": [
@@ -159,9 +143,7 @@
     "/api/products/": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "CRUD de Produtos"
-        ],
+        "tags": ["CRUD de Produtos"],
         "description": "",
         "summary": "Rota para listar produtos",
         "responses": {
@@ -178,9 +160,7 @@
       },
       "post": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "CRUD de Produtos"
-        ],
+        "tags": ["CRUD de Produtos"],
         "description": "",
         "summary": "Rota para criar um novo produto",
         "parameters": [
@@ -217,9 +197,7 @@
       },
       "put": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "CRUD de Produtos"
-        ],
+        "tags": ["CRUD de Produtos"],
         "description": "",
         "summary": "Rota para atualizar um produto",
         "parameters": [
@@ -229,7 +207,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "_id": {
+                "id": {
                   "example": "any"
                 },
                 "status": {
@@ -261,9 +239,7 @@
     "/api/products/{id}": {
       "delete": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "CRUD de Produtos"
-        ],
+        "tags": ["CRUD de Produtos"],
         "description": "",
         "summary": "Rota para deletar um produto",
         "parameters": [
@@ -293,9 +269,7 @@
     "/api/products/all": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "CRUD de Produtos"
-        ],
+        "tags": ["CRUD de Produtos"],
         "description": "",
         "summary": "Rota para listar todos os produtos",
         "responses": {
@@ -311,9 +285,7 @@
     "/api/products/aprove/{id}": {
       "put": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "CRUD de Produtos"
-        ],
+        "tags": ["CRUD de Produtos"],
         "description": "",
         "summary": "Rota para aprovar um produto",
         "parameters": [
@@ -357,9 +329,7 @@
     },
     "/api/buckets/": {
       "get": {
-        "tags": [
-          "Buckets"
-        ],
+        "tags": ["Buckets"],
         "description": "",
         "summary": "Rota para listar todos os buckets",
         "responses": {
@@ -375,9 +345,7 @@
     "/api/buckets/{bucketName}": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Buckets"
-        ],
+        "tags": ["Buckets"],
         "description": "",
         "summary": "Rota para listar os arquivos de um bucket específico",
         "parameters": [
@@ -405,9 +373,7 @@
     "/api/buckets/{bucketName}/upload": {
       "post": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Buckets"
-        ],
+        "tags": ["Buckets"],
         "description": "",
         "summary": "Rota para upload de arquivos em um bucket específico",
         "parameters": [
@@ -441,9 +407,7 @@
     "/api/buckets/{bucketName}/file/{fileName}": {
       "delete": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Buckets"
-        ],
+        "tags": ["Buckets"],
         "description": "",
         "summary": "Rota para deletar um arquivo de um bucket específico",
         "parameters": [
@@ -481,9 +445,7 @@
     "/api/logs/por-data/": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Logs"
-        ],
+        "tags": ["Logs"],
         "summary": "Rota para listar logs por data",
         "parameters": [
           {
@@ -514,9 +476,7 @@
     "/api/logs/": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Logs"
-        ],
+        "tags": ["Logs"],
         "description": "Realize qualquer ação CRUD para gerar logs",
         "summary": "Rota para listar logs",
         "responses": {
@@ -532,9 +492,7 @@
     "/api/logs/{id}": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Logs"
-        ],
+        "tags": ["Logs"],
         "description": "",
         "summary": "Rota para buscar um log específico",
         "parameters": [
@@ -559,9 +517,7 @@
       },
       "delete": {
         "security": [{ "apiKeyAuth": [] }],
-        "tags": [
-          "Logs"
-        ],
+        "tags": ["Logs"],
         "description": "",
         "summary": "Rota para deletar um log específico",
         "parameters": [
