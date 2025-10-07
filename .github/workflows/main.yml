@@ -25,6 +25,9 @@ jobs:
       - name: Instalar dependências
         run: npm install --force
 
+      - name: Gerar cliente Prisma
+        run: npx prisma generate
+
       - name: Instalar semver
         run: npm install -g semver
 
