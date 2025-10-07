@@ -13,15 +13,19 @@ COPY package*.json ./
 # Baixa e instala as dependências
 RUN npm install
 
-#RUN npm run build
-
 # Copia todos os arquivos da pasta raiz para a pasta de trabalho no container
 COPY . .
 
-# Criando algumas variáveis de ambiente
-#ENV MONGODB_INITDB_ROOT_USERNAME=user
-#ENV MONGODB_INITDB_ROOT_PASSWORD=pass
-#ENV MONGODB_INITDB_DATABASE=projetocompras
+# Gera o cliente Prisma
+RUN npx prisma generate
+
+# Variáveis de ambiente para MySQL/Prisma
+# ENV DATABASE_URL="mysql://user:password@host:port/database"
+# ENV DB_HOST="localhost"
+# ENV DB_USER="admin"
+# ENV DB_PASSWORD="adminfatec"
+# ENV DB_NAME="projetoCompras"
+# ENV DB_PORT="3306"
 
 # Porta exposta em que a aplicação roda
 EXPOSE 4000

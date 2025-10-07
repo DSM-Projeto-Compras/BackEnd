@@ -42,7 +42,7 @@ access-token: {{accessToken}}
 
 ###
 # Deleta um produto específico
-DELETE {{baseURL}}/60b7285f5f9b2a2e88d7ef84
+DELETE {{baseURL}}/cm1m7e8xw0001xyz123abc456
 Content-Type: application/json
 access-token: {{accessToken}}
 
@@ -57,7 +57,7 @@ Content-Type: application/json
 access-token: {{accessToken}}
 
 {
-    "_id": "60b7285f5f9b2a2e88d7ef84",
+    "id": "cm1m7e8xw0001xyz123abc456",
     "nome": "Bolas de Futebol Modificadas",
     "tipo": "material-de-consumo",
     "quantidade": 30,
@@ -71,7 +71,7 @@ access-token: {{accessToken}}
 
 ###
 # Atualiza o status de um produto específico (requer permissão de administrador)
-PUT {{baseURL}}/aprove/60b7285f5f9b2a2e88d7ef84
+PUT {{baseURL}}/aprove/cm1m7e8xw0001xyz123abc456
 Content-Type: application/json
 access-token: {{adminAccessToken}}
 

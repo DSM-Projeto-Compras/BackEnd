@@ -27,7 +27,7 @@
 #      - SECRET_KEY=${SECRET_KEY}
 #    networks:
 #      - rede_compras
-#    
+#
 #  certbot:
 #    image: certbot/certbot
 #    container_name: certbot
@@ -56,33 +56,59 @@
 #      - MONGODB_URI=${MONGODB_URI}
 #      - MONGODB_DB=${MONGODB_DB}
 
-version: '3.8'
+version: "3.8"
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-compras
+    environment:
+      MYSQL_ROOT_PASSWORD: adminfatec
+      MYSQL_DATABASE: projetoCompras
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: adminfatec
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - rede_compras
+    command: --default-authentication-plugin=mysql_native_password
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-    ports: 
+    ports:
       - "4000:4000"
     volumes:
       - .:/BackEnd
       - /BackEnd/node_modules
     working_dir: /BackEnd
     environment:
-      - MONGO_URI=${MONGODB_URI}
+      - DATABASE_URL=mysql://admin:adminfatec@mysql:3306/projetoCompras
+      - DB_HOST=mysql
+      - DB_USER=admin
+      - DB_PASSWORD=adminfatec
+      - DB_NAME=projetoCompras
+      - DB_PORT=3306
+      - SECRET_KEY=${SECRET_KEY}
+      - EXPIRES_IN=${EXPIRES_IN}
+      - PORT=4000
+    depends_on:
+      - mysql
     networks:
       - rede_compras
 
   # #backend
   # back_end:
-  #   image: 
+  #   image:
   #   build:
-  #     context: 
+  #     context:
   #     dockerfile: Dockerfile
   #   container_name: back_end
   #   environment:
-  #     
+  #
   #   depends_on:
   #     - mongo
   #   ports:
@@ -95,7 +121,7 @@ services:
 #     driver: bridge
 
 volumes:
-  mongo_data:
+  mysql_data:
 
 networks:
   rede_compras:

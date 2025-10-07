@@ -21,9 +21,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Instalar dependências
         run: npm install --force
+
+      - name: Gerar cliente Prisma
+        run: npx prisma generate
 
       - name: Instalar semver
         run: npm install -g semver
@@ -51,21 +54,21 @@ jobs:
             LAST_TAG="v0.0.0"
           fi
           echo "Versão Atual: $LAST_TAG"
-          
+
           if [ "$LAST_TAG" = "v0.0.0" ]; then
             COMMITS=$(git log --pretty=format:"%s")
           else
             COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s")
           fi
-          
+
           echo "Commits desde a última tag:"
           echo "$COMMITS"
-          
+
           # Inicializando variáveis
           MAJOR=0
           MINOR=0
           PATCH=0
-          
+
           # Analisando mensagens de commit
           for COMMIT in "$COMMITS"; do
             if [[ "$COMMIT" == *"BREAKING CHANGE"* ]]; then
@@ -76,7 +79,7 @@ jobs:
               PATCH=1
             fi
           done
-          
+
           # Calculando a nova versão usando semver
           CURRENT_VERSION=${LAST_TAG#v}
           NEW_VERSION=$CURRENT_VERSION
@@ -87,7 +90,7 @@ jobs:
           elif [[ $PATCH -eq 1 ]]; then
             NEW_VERSION=$(semver -i patch $CURRENT_VERSION)
           fi
-          
+
           echo "Vesões (atual / nova): $CURRENT_VERSION # $NEW_VERSION"
 
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
@@ -103,7 +106,7 @@ jobs:
             echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
             echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -122,7 +125,7 @@ jobs:
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV 
           echo "repo_name=$REPO_NAME" >> $GITHUB_OUTPUT
           echo "Repositório: $REPO_NAME"
-      
+
       - name: Verificar e criar repositório no Docker Hub (se necessário)
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -131,7 +134,7 @@ jobs:
           echo "Verificando repositório: $REPO_NAME"
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u $DOCKERHUB_USERNAME:$DOCKERHUB_TOKEN \
             "https://hub.docker.com/v2/repositories/$DOCKERHUB_USERNAME/$REPO_NAME/")
-          
+
           if [ "$RESPONSE" -eq 404 ]; then
             echo "Repositório não existe. Criando repositório no Docker Hub..."
             curl -s -X POST -u $DOCKERHUB_USERNAME:$DOCKERHUB_TOKEN \
@@ -157,12 +160,11 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:$new_version
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME:latest
 
-      
       - name: Atualizar versão no package.json
         if: steps.version.outputs.should_deploy == 'true'
         run: |
           npm version $new_version --no-git-tag-version
-          
+
       - name: Commit e push
         if: steps.version.outputs.should_deploy == 'true'
         env:
@@ -177,7 +179,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build  # Garante que o job 'build' será executado antes  
+    needs: build # Garante que o job 'build' será executado antes
 
     steps:
       - name: Definir o nome do repositório (caso não exista)
@@ -252,7 +254,7 @@ jobs:
 
       #        echo "🚀 Subindo novo container... $REPO_NAME $IMAGE"
       #        docker run -d -p 3000:3000 \
-      #          -e MONGODB_URI="${{ secrets.MONGODB_URI }}" \
+      #          -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
       #          -e DB_HOST="${{ secrets.DB_HOST }}" \
       #          -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
       #          -e DB_USER="${{ secrets.DB_USER }}" \
@@ -261,7 +263,6 @@ jobs:
       #          -e REGION="${{ secrets.REGION }}" \
       #          -e LOG_GROUP_NAME="${{ secrets.LOG_GROUP_NAME }}" \
       #          -e LOG_STREAM_NAME="${{ secrets.LOG_STREAM_NAME }}" \
-      #          -e MONGODB_DB="${{ secrets.MONGODB_DB }}" \
       #          -e SECRET_KEY="${{ secrets.SECRET_KEY }}" \
       #          -e EXPIRES_IN="${{ secrets.EXPIRES_IN }}" \
       #          -e PORT="${{ secrets.PORT }}" \

@@ -1,17 +1,20 @@
-import { validationResult } from 'express-validator';
-import Product from '../models/ProductModel.js';
+import { validationResult } from "express-validator";
+import Product from "../models/ProductModel.js";
 
-// import { logInfo, logError } from '../logger.js';
+import { logInfo, logError } from "../logger.js";
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find()
-      .populate('userId', 'nome')
-      .exec();
+    const products = await Product.find();
 
     res.status(200).json(products);
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao obter a listagem dos produtos', error: err.message });
+    res
+      .status(500)
+      .json({
+        message: "Erro ao obter a listagem dos produtos",
+        error: err.message,
+      });
   }
 };
 
@@ -20,11 +23,13 @@ export const getProductByUserId = async (req, res) => {
     const userId = req.user.userId;
     const products = await Product.find({ userId });
     if (!products) {
-      return res.status(404).json({ message: 'Produto não encontrado' });
+      return res.status(404).json({ message: "Produto não encontrado" });
     }
     res.status(200).json(products);
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao obter o produto pelo ID', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Erro ao obter o produto pelo ID", error: err.message });
   }
 };
 
@@ -36,25 +41,31 @@ export const createProduct = async (req, res) => {
     }
     const { quantidade, descricao, ...outrasProps } = req.body;
     const userId = req.user.userId;
-    const justificativa = '';
-    const descricaoTratada = descricao ?? '';
+    const justificativa = "";
+    const descricaoTratada = descricao ?? "";
 
-    const product = new Product({
+    const productData = {
       quantidade: parseInt(quantidade),
       justificativa: justificativa,
       userId,
       descricao: descricaoTratada,
-      ...outrasProps
+      ...outrasProps,
+    };
+
+    const savedProduct = await Product.create(productData);
+
+    //salvando o log de sucesso no mysql
+    await logInfo("Produto criado com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
     });
-
-    await product.save();
-
-    // //salvando o log de sucesso no mysql
-    // await logInfo('Produto criado com sucesso', req, { body: req.body, user: req.user?.id});
-    // res.status(201).json(product);
+    res.status(201).json(savedProduct);
   } catch (err) {
-    // await logError('Erro ao criar produto', req, err, { body: req.body, user: req.user?.id });
-    res.status(500).json({ message: 'Erro no servidor', error: err.message });
+    await logError("Erro ao criar produto", req, err, {
+      body: req.body,
+      user: req.user?.id,
+    });
+    res.status(500).json({ message: "Erro no servidor", error: err.message });
   }
 };
 
@@ -64,49 +75,81 @@ export const deleteProduct = async (req, res) => {
     const product = await Product.findById(productId);
 
     if (!product) {
-      return res.status(404).json({ message: 'Produto não encontrado' });
+      return res.status(404).json({ message: "Produto não encontrado" });
     }
 
-    if (product.userId.toString() !== req.user.userId.toString()) {
-      return res.status(403).json({ message: 'Você não tem permissão para excluir este produto' });
+    if (product.userId !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ message: "Você não tem permissão para excluir este produto" });
     }
-    if (product.status !== 'Pendente') {
-      return res.status(403).json({ message: 'Só é permitido excluir produtos com status Pendente' });
+    if (product.status !== "Pendente") {
+      return res
+        .status(403)
+        .json({
+          message: "Só é permitido excluir produtos com status Pendente",
+        });
     }
 
     const result = await Product.findByIdAndDelete(productId);
     res.status(200).json(result);
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao excluir o produto', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Erro ao excluir o produto", error: err.message });
   }
 };
 
 export const updateProduct = async (req, res) => {
-  const idDocumento = req.body._id;
-  delete req.body._id;
+  const idDocumento = req.body.id;
+  delete req.body.id;
 
   try {
     const product = await Product.findById(idDocumento);
     if (!product) {
-      return res.status(404).json({ message: 'Produto não encontrado' });
+      return res.status(404).json({ message: "Produto não encontrado" });
     }
-    if (req.body.status != null){
+    if (req.body.status != null) {
       if (product.status != req.body.status) {
-        // await logError('Tentativa de atualização de status do produto', req, { body: req.body, user: req.user?.id });
-        return res.status(403).json({ message: 'Você não tem permissão para atualizar os status do produto' });
+        await logError("Tentativa de atualização de status do produto", req, {
+          body: req.body,
+          user: req.user?.id,
+        });
+        return res
+          .status(403)
+          .json({
+            message:
+              "Você não tem permissão para atualizar os status do produto",
+          });
       }
     }
-    if (product.userId.toString() !== req.user.userId.toString()) {
-      // await logError('Usuário não autorizado a atualizar o produto', req, { body: req.body, user: req.user?.id });
-      return res.status(403).json({ message: 'Você não tem permissão para atualizar este produto' });
+    if (product.userId !== req.user.userId) {
+      await logError("Usuário não autorizado a atualizar o produto", req, {
+        body: req.body,
+        user: req.user?.id,
+      });
+      return res
+        .status(403)
+        .json({
+          message: "Você não tem permissão para atualizar este produto",
+        });
     }
 
-    await Product.findByIdAndUpdate(idDocumento, req.body, { new: true });
-    // await logInfo('Produto atualizado com sucesso', req, { body: req.body, user: req.user?.id });
-    res.status(202).json(product);
+    const updatedProduct = await Product.findByIdAndUpdate(
+      idDocumento,
+      req.body
+    );
+    await logInfo("Produto atualizado com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
+    });
+    res.status(202).json(updatedProduct);
   } catch (err) {
-    // await logError('Erro ao atualizar produto', req, err, { body: req.body, user: req.user?.id });
-    res.status(500).json({ message: 'Erro no servidor', error: err.message });
+    await logError("Erro ao atualizar produto", req, err, {
+      body: req.body,
+      user: req.user?.id,
+    });
+    res.status(500).json({ message: "Erro no servidor", error: err.message });
   }
 };
 
@@ -118,29 +161,53 @@ export const updateProductStatus = async (req, res) => {
     const product = await Product.findById(productId);
 
     if (!product) {
-      return res.status(404).json({ message: 'Produto não encontrado' });
+      return res.status(404).json({ message: "Produto não encontrado" });
     }
 
-    if (product.status !== 'Pendente') {
-      return res.status(400).json({ message: 'O status só pode ser alterado se estiver "Pendente".' });
+    if (product.status !== "Pendente") {
+      return res
+        .status(400)
+        .json({
+          message: 'O status só pode ser alterado se estiver "Pendente".',
+        });
     }
 
-    if (!['Aprovado', 'Negado'].includes(status)) {
-      return res.status(400).json({ message: 'Status inválido. Utilize "Aprovado" ou "Negado".' });
+    if (!["Aprovado", "Negado"].includes(status)) {
+      return res
+        .status(400)
+        .json({ message: 'Status inválido. Utilize "Aprovado" ou "Negado".' });
     }
-    product.status = status;
-
-    if (status === 'Negado') {
-      product.justificativa = justificativa || '';
+    const updateData = { status };
+    if (status === "Negado") {
+      updateData.justificativa = justificativa || "";
     } else {
-      product.justificativa = undefined;
+      updateData.justificativa = null;
     }
 
-    await product.save();
-    // await logInfo('Status do produto atualizado com sucesso', req, { body: req.body, user: req.user?.id });
-    res.status(200).json({ message: 'Status do produto atualizado com sucesso', product });
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      updateData
+    );
+    await logInfo("Status do produto atualizado com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
+    });
+    res
+      .status(200)
+      .json({
+        message: "Status do produto atualizado com sucesso",
+        product: updatedProduct,
+      });
   } catch (err) {
-    // await logError('Erro ao atualizar status do produto', req, err, { body: req.body, user: req.user?.id });
-    res.status(500).json({ message: 'Erro ao atualizar o status do produto', error: err.message });
+    await logError("Erro ao atualizar status do produto", req, err, {
+      body: req.body,
+      user: req.user?.id,
+    });
+    res
+      .status(500)
+      .json({
+        message: "Erro ao atualizar o status do produto",
+        error: err.message,
+      });
   }
 };

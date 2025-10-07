@@ -8,7 +8,12 @@
     "doc": "node swagger.js",
     "test": "jest",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
+    "db:studio": "prisma studio",
+    "db:push": "prisma db push"
   },
   "keywords": [
     "MVC",
@@ -18,6 +23,7 @@
   "author": "Thiago Diegoli",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^6.16.2",
     "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -28,11 +34,11 @@
     "express": "^4.21.0",
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.16.0",
     "multer": "^2.0.1",
     "multer-s3": "^3.0.1",
     "mysql2": "^3.14.1",
     "nodemailer": "^7.0.3",
+    "prisma": "^6.16.2",
     "swagger-ui-express": "^4.1.2"
   },
   "devDependencies": {

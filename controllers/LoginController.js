@@ -14,8 +14,7 @@ export const register = async (req, res) => {
     const { nome, email, senha } = req.body;
     const senhaCriptografada = await bcrypt.hash(senha, 10);
     let cargo = "user";
-    const usuario = new User({ nome, email, senha: senhaCriptografada, cargo });
-    await usuario.save();
+    const usuario = await User.create({ nome, email, senha: senhaCriptografada, cargo });
     res.status(201).json(usuario);
   } catch (err) {
     res.status(500).json({ message: `${err.message} Erro no server` });
@@ -43,7 +42,7 @@ export const login = async (req, res) => {
     }
 
     jwt.sign(
-      { userId: usuario._id },
+      { userId: usuario.id },
       process.env.SECRET_KEY,
       { expiresIn: process.env.EXPIRES_IN },
       (err, token) => {
@@ -65,15 +64,14 @@ export const registerAdmin = async (req, res) => {
 
     const { nome, email, senha } = req.body;
     const senhaCriptografada = await bcrypt.hash(senha, 10);
-    const usuario = new User({
+    const usuario = await User.create({
       nome,
       email,
       senha: senhaCriptografada,
       cargo: "admin",
     });
-    await usuario.save();
 
-    const { senha: _, ...usuarioSemSenha } = usuario.toObject();
+    const { senha: _, ...usuarioSemSenha } = usuario;
     res.status(201).json(usuarioSemSenha);
   } catch (err) {
     res.status(500).json({ message: `${err.message} Erro no server` });
@@ -95,7 +93,7 @@ export const deleteUser = async (req, res) => {
       });
     }
 
-    if (req.user._id.toString() === id) {
+    if (req.user.id === id) {
       return res
         .status(403)
         .json({ message: "Você não pode deletar sua própria conta" });
@@ -132,7 +130,7 @@ export const forgotPassword = async (req, res) => {
 
     const expiracao = new Date(Date.now() + 15 * 60 * 1000);
 
-    await User.findByIdAndUpdate(usuario._id, {
+    await User.findByIdAndUpdate(usuario.id, {
       codigoEmail: codigo,
       codigoExp: expiracao,
     });
@@ -209,7 +207,7 @@ export const resetPassword = async (req, res) => {
 
     const senhaCriptografada = await bcrypt.hash(novaSenha, 10);
 
-    await User.findByIdAndUpdate(usuario._id, {
+    await User.findByIdAndUpdate(usuario.id, {
       senha: senhaCriptografada,
       codigoEmail: null,
       codigoExp: null,
@@ -223,8 +221,13 @@ export const resetPassword = async (req, res) => {
 
 export const getAdmins = async (req, res) => {
   try {
-    const admins = await User.find({ cargo: "admin" }).select("-senha");
-    res.status(200).json(admins);
+    const admins = await User.find({ cargo: "admin" });
+    // Remove senha dos resultados
+    const adminsWithoutPassword = admins.map(admin => {
+      const { senha, ...adminWithoutPassword } = admin;
+      return adminWithoutPassword;
+    });
+    res.status(200).json(adminsWithoutPassword);
   } catch (err) {
     res.status(500).json({ message: `${err.message} Erro no server` });
   }
@@ -232,12 +235,15 @@ export const getAdmins = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const usuario = await User.findById(req.user._id).select("-senha");
+    const usuario = await User.findById(req.user.userId);
 
     if (!usuario) {
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
-    res.status(200).json(usuario);
+    
+    // Remove senha do resultado
+    const { senha, ...usuarioWithoutPassword } = usuario;
+    res.status(200).json(usuarioWithoutPassword);
   } catch (err) {
     res.status(500).json({ message: `${err.message} Erro no server` });
   }
