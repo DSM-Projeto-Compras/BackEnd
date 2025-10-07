@@ -3,13 +3,12 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import { connectToDatabase, testarConexaoMongo } from './utils/mongodb.js';
+import { connectToDatabase, testarConexaoMySQL } from './utils/database.js';
 // import { testarConexaoMySQL } from './utils/mysql.js'; //aws
 
 import LoginRoute from './routes/LoginRoute.js';
 import productRoutes from './routes/ProductRoute.js';
-// import bucketRoute from './routes/BucketRoute.js';
-// import logsRoute from './routes/LogsRoute.js';
+import logsRoute from './routes/LogsRoute.js';
 
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
@@ -19,7 +18,7 @@ dotenv.config();
 const app = express();
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css"
 
-// Conectar ao MongoDB
+// Conectar ao MySQL via Prisma
 connectToDatabase();
 
 app.use(cors({
@@ -51,12 +50,12 @@ app.get('/api', (req, res)=> {
  })
 })
 
-app.get('/mongodb/testar-conexao', testarConexaoMongo);
+app.get('/mysql/testar-conexao', testarConexaoMySQL);
 // app.get('/mysql/testar-conexao', testarConexaoMySQL); //aws
 
 app.use('/api/logins', LoginRoute);
 app.use('/api/products', productRoutes);
-// app.use('/api/logs', logsRoute); //aws
+app.use('/api/logs', logsRoute);
 
 /* app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(JSON.parse(fs.readFileSync('./swagger/swagger_output.json')),{customCss:
   '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
