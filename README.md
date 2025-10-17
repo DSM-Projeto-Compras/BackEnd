@@ -1,5 +1,11 @@
 # 🛒 Projeto Compras FATEC - Backend
 
+![npm](https://img.shields.io/badge/npm-v11.3.0-red?logo=npm)
+![express](https://img.shields.io/badge/express-v4.21.0-darkgreen?logo=express)
+![prisma](https://img.shields.io/badge/prisma-v6.16.2-purple?logo=prisma)
+![Jest](https://img.shields.io/badge/jest-v29.7.0-green?logo=jest)
+![docker](https://img.shields.io/badge/docker-v28.3.0-blue?logo=docker)
+
 API RESTful desenvolvida em Node.js com Express, utilizando MySQL como banco de dados e Prisma como ORM.
 
 ## 🚀 Configuração Inicial
