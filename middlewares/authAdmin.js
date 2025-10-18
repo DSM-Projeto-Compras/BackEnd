@@ -12,8 +12,7 @@ const authAdmin = (req, res, next) => {
   }
   if (!token) {
     return res
-      .status(401)
-      .json({ message: "Acesso negado. Nenhum token fornecido." });
+      .status(401).json({ message: "Acesso negado. Nenhum token fornecido." });
   }
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
