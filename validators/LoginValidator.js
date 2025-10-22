@@ -55,7 +55,7 @@ export const validaCadastroAdmin = [
 ];
 
 export const validaDeleteUser = [
-  param("id").isMongoId().withMessage("ID do usuário inválido"),
+  param("id").notEmpty().withMessage("ID do usuário é obrigatório"),
 ];
 
 export const validaForgotPassword = [
