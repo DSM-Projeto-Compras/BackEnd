@@ -8,6 +8,10 @@ const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'],
 });
 
+// Debug do ambiente
+console.log('Database URL format:', process.env.DATABASE_URL?.split(':')[0] || 'not set');
+console.log('Prisma Schema Path:', process.env.PRISMA_SCHEMA_PATH || 'default');
+
 export const connectToDatabase = async () => {
   try {
     // Testa a conexão
@@ -22,10 +26,21 @@ export const connectToDatabase = async () => {
 export const testarConexaoPostgres = async (req, res) => {
   try {
     await prisma.$connect();
-    res.status(200).json({ message: 'Conexão com Postgres bem-sucedida' });
+    res.status(200).json({ message: 'Conexão com o banco de dados bem-sucedida' });
   } catch (error) {
-    console.error('Erro ao conectar ao Postgres:', error);
-    res.status(500).json({ error: 'Erro ao conectar ao Postgres', details: error });
+    console.error('Erro ao conectar ao banco de dados:', error);
+    // Log more detailed error information
+    const errorDetails = {
+      code: error.code,
+      message: error.message,
+      meta: error.meta,
+      clientVersion: error.clientVersion
+    };
+    res.status(500).json({ 
+      error: 'Erro ao conectar ao banco de dados', 
+      details: errorDetails,
+      connectionUrl: process.env.DATABASE_URL ? 'Configurado' : 'Não configurado'
+    });
   }
 };
 

@@ -1,6 +1,6 @@
 {
   "name": "projetomvcrestful",
-  "version": "0.13.0",
+  "version": "0.15.0",
   "description": "Projeto Interdisciplinar MVC RESTful da Fatec",
   "main": "app.js",
   "type": "module",
@@ -8,6 +8,7 @@
     "doc": "node swagger.js",
     "test": "jest",
     "start": "node app.js",
+    "build": "prisma generate && cat prisma/schema.prisma",
     "dev": "nodemon app.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
