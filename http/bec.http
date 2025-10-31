@@ -1,0 +1,49 @@
+### Variáveis
+@baseUrl = http://localhost:4000
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWhmN3YzdG8wMDAwdGZmY3FsYnprdDB3IiwiaWF0IjoxNzYxOTM3MTE3LCJleHAiOjE3NjIwMjM1MTd9.6HDfG_ouKkZvXKMbx549Ss3VJRohWdOE_FncAnSafjQ
+
+### ========================================
+### BEC - WEB SCRAPING
+### ========================================
+
+### 1. Obter lista de produtos (autocomplete)
+POST {{baseUrl}}/api/bec/products
+Content-Type: application/json
+access-token: {{accessToken}}
+
+{
+  "prefixText": "cadeira",
+  "count": 20
+}
+
+### 2. Buscar produto por descrição
+POST {{baseUrl}}/api/bec/search
+Content-Type: application/json
+access-token: {{accessToken}}
+
+{
+  "description": "CANETA APLICADORA DE INSULINA"
+}
+
+### 3. Obter detalhes de um produto específico
+# Substitua o código abaixo por um ID real obtido da busca
+GET {{baseUrl}}/api/bec/product/6522610
+access-token: {{accessToken}}
+
+### 4. Buscar e obter detalhes em uma única chamada (recomendado)
+POST {{baseUrl}}/api/bec/search-details
+Content-Type: application/json
+access-token: {{accessToken}}
+
+{
+  "description": "notebook"
+}
+
+### 5. Exemplo com mouse
+POST {{baseUrl}}/api/bec/search-details
+Content-Type: application/json
+access-token: {{accessToken}}
+
+{
+  "description": "mouse optico"
+}
