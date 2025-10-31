@@ -8,6 +8,10 @@ const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'],
 });
 
+// Debug do ambiente
+console.log('Database URL format:', process.env.DATABASE_URL?.split(':')[0] || 'not set');
+console.log('Prisma Schema Path:', process.env.PRISMA_SCHEMA_PATH || 'default');
+
 export const connectToDatabase = async () => {
   try {
     // Testa a conexão
