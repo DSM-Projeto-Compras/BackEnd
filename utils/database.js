@@ -22,10 +22,21 @@ export const connectToDatabase = async () => {
 export const testarConexaoMySQL = async (req, res) => {
   try {
     await prisma.$connect();
-    res.status(200).json({ message: 'Conexão com MySQL bem-sucedida' });
+    res.status(200).json({ message: 'Conexão com o banco de dados bem-sucedida' });
   } catch (error) {
-    console.error('Erro ao conectar ao MySQL:', error);
-    res.status(500).json({ error: 'Erro ao conectar ao MySQL', details: error });
+    console.error('Erro ao conectar ao banco de dados:', error);
+    // Log more detailed error information
+    const errorDetails = {
+      code: error.code,
+      message: error.message,
+      meta: error.meta,
+      clientVersion: error.clientVersion
+    };
+    res.status(500).json({ 
+      error: 'Erro ao conectar ao banco de dados', 
+      details: errorDetails,
+      connectionUrl: process.env.DATABASE_URL ? 'Configurado' : 'Não configurado'
+    });
   }
 };
 

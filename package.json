@@ -8,6 +8,7 @@
     "doc": "node swagger.js",
     "test": "jest",
     "start": "node app.js",
+    "build": "prisma generate",
     "dev": "nodemon app.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
