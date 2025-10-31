@@ -2,14 +2,21 @@ import jwt from "jsonwebtoken";
 import User from "../models/LoginModel.js";
 
 const authAdmin = (req, res, next) => {
-  const token = req.header("access-token");
+  let token = req.header("access-token");
+
+  if (!token && req.header("authorization")) {
+    const authHeader = req.header("authorization");
+    if (authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+  }
   if (!token) {
     return res
-      .status(401)
-      .json({ message: "Acesso negado. Nenhum token fornecido." });
+      .status(401).json({ message: "Acesso negado. Nenhum token fornecido." });
   }
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    console.log("Decoded JWT:", decoded);
     User.findById(decoded.userId)
       .then((user) => {
         if (!user) {
