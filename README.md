@@ -8,6 +8,20 @@
 
 API RESTful desenvolvida em Node.js com Express, utilizando MySQL como banco de dados e Prisma como ORM.
 
+## ✨ Features
+
+- 🔐 Autenticação JWT
+- 👥 Sistema de Usuários (User/Admin)
+- 📦 CRUD de Produtos
+- 🔍 **Web Scraping BEC** - Integração com Bolsa Eletrônica de Compras de SP
+- 📊 Logs de atividades
+- 📝 Documentação Swagger
+- ✅ Testes automatizados
+- 🐳 Suporte Docker
+
+> **🆕 Nova Feature:** Sistema completo de integração com o catálogo BEC via web scraping.  
+> Veja detalhes em [README_BEC_FEATURE.md](./README_BEC_FEATURE.md)
+
 ## 🚀 Configuração Inicial
 
 ### 1. Instalar Dependências

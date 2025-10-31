@@ -16,14 +16,14 @@ export const connectToDatabase = async () => {
   try {
     // Testa a conexão
     await prisma.$connect();
-    console.log('Conectado ao MySQL via Prisma');
+    console.log('Conectado ao Postgres via Prisma');
   } catch (err) {
-    console.error('Erro ao conectar ao MySQL:', err);
+    console.error('Erro ao conectar ao Postgres:', err);
     throw err;
   }
 };
 
-export const testarConexaoMySQL = async (req, res) => {
+export const testarConexaoPostgres = async (req, res) => {
   try {
     await prisma.$connect();
     res.status(200).json({ message: 'Conexão com o banco de dados bem-sucedida' });
@@ -48,9 +48,9 @@ export const testarConexaoMySQL = async (req, res) => {
 export const disconnectFromDatabase = async () => {
   try {
     await prisma.$disconnect();
-    console.log('Desconectado do MySQL');
+    console.log('Desconectado do Postgres');
   } catch (err) {
-    console.error('Erro ao desconectar do MySQL:', err);
+    console.error('Erro ao desconectar do Postgres:', err);
   }
 };
 
