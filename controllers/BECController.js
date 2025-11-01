@@ -224,8 +224,8 @@ export const searchAndGetDetails = async (req, res) => {
     const searchHtml = await searchResponse.text();
     const $search = cheerio.load(searchHtml);
 
-    // Buscar o primeiro resultado
-    const firstProductLink = $(
+    // Buscar o primeiro resultado (usar $search em vez de $)
+    const firstProductLink = $search(
       "#ContentPlaceHolder1_gvResultadoPesquisa_lbTituloItem_0"
     );
     const productText = firstProductLink.text().trim();

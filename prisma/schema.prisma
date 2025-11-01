@@ -33,6 +33,12 @@ model Product {
   quantidade   Int
   categoria    String
   descricao    String?
+  cod_id       String?
+  grupo        String?
+  classe       String?
+  material     String?
+  elemento     String?
+  natureza     String?
   data         DateTime @default(now())
   status       String   @default("Pendente") // "Pendente", "Aprovado", "Negado"
   justificativa String?

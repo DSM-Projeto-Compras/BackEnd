@@ -99,7 +99,7 @@ export const deleteUser = async (req, res) => {
         .json({ message: "Você não pode deletar sua própria conta" });
     }
 
-    if (req.user.dataCriacao < usuarioADeletar.dataCriacao) {
+    if (req.user.dataCriacao > usuarioADeletar.dataCriacao) {
       return res.status(403).json({
         message: "Você não pode deletar usuários mais antigos que você",
       });
