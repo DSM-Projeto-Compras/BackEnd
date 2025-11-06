@@ -14,7 +14,8 @@
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "postinstall": "prisma generate"
   },
   "keywords": [
     "MVC",

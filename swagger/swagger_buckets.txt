@@ -1,0 +1,115 @@
+"/api/buckets/": {
+      "get": {
+        "tags": ["Buckets"],
+        "description": "",
+        "summary": "Rota para listar todos os buckets",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["Buckets"],
+        "description": "",
+        "summary": "Rota para listar os arquivos de um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}/upload": {
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["Buckets"],
+        "description": "",
+        "summary": "Rota para upload de arquivos em um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado"
+          },
+          "400": {
+            "description": "Solicitação Inválida"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/buckets/{bucketName}/file/{fileName}": {
+      "delete": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["Buckets"],
+        "description": "",
+        "summary": "Rota para deletar um arquivo de um bucket específico",
+        "parameters": [
+          {
+            "name": "bucketName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do bucket",
+            "type": "string"
+          },
+          {
+            "name": "fileName",
+            "in": "path",
+            "required": true,
+            "description": "Nome do arquivo",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "Sem Conteúdo"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
