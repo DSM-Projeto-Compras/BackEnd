@@ -7,6 +7,7 @@ import {
   forgotPassword,
   verifyCode,
   resetPassword,
+  changePassword,
   getAdmins,
   getMe,
 } from "../controllers/LoginController.js";
@@ -18,6 +19,7 @@ import {
   validaForgotPassword,
   validaVerifyCode,
   validaResetPassword,
+  validaChangePassword,
 } from "../validators/LoginValidator.js";
 import authAdmin from "../middlewares/authAdmin.js";
 
@@ -37,5 +39,6 @@ router.delete("/usuario/:id", authAdmin, validaDeleteUser, deleteUser);
 router.post("/forgot", validaForgotPassword, forgotPassword);
 router.post("/verify", validaVerifyCode, verifyCode);
 router.patch("/reset", validaResetPassword, resetPassword);
+router.patch("/change", authAdmin, validaChangePassword, changePassword);
 
 export default router;

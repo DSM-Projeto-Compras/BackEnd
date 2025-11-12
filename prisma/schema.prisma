@@ -1,56 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   nome        String
-  email       String   @unique
+  email       String    @unique
   senha       String
-  cargo       String   @default("user") // "user" or "admin"
-  dataCriacao DateTime @default(now())
+  cargo       String    @default("user")
+  dataCriacao DateTime  @default(now())
   codigoEmail String?
   codigoExp   DateTime?
-  
-  // Relação com produtos
   products    Product[]
-  
+
   @@map("users")
 }
 
 model Product {
-  id           String   @id @default(cuid())
-  nome         String
-  tipo         String
-  quantidade   Int
-  categoria    String
-  descricao    String?
-  data         DateTime @default(now())
-  status       String   @default("Pendente") // "Pendente", "Aprovado", "Negado"
+  id            String   @id @default(cuid())
+  nome          String
+  tipo          String
+  quantidade    Int
+  categoria     String
+  descricao     String?
+  data          DateTime @default(now())
+  status        String   @default("Pendente")
   justificativa String?
-  userId       String
-  
-  // Relação com usuário
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  userId        String
+  classe        String?
+  cod_id        String?
+  elemento      String?
+  grupo         String?
+  material      String?
+  natureza      String?
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("products")
 }
 
 model Log {
-  id         Int      @id @default(autoincrement())
-  level      String   // "info", "error", "warn", etc.
-  message    String   @db.Text
-  route      String?
-  extra      String?  @db.Text // JSON stringified
-  createdAt  DateTime @default(now()) @map("created_at")
-  
+  id        Int      @id @default(autoincrement())
+  level     String
+  message   String
+  route     String?
+  extra     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
   @@map("logs")
 }

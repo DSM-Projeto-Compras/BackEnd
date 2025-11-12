@@ -100,3 +100,11 @@ export const validaResetPassword = [
     .isLength({ min: 6 })
     .withMessage("A nova senha deve ter pelo menos 6 caracteres"),
 ];
+
+export const validaChangePassword = [
+  check("senha")
+    .notEmpty()
+    .withMessage("A nova senha é obrigatória")
+    .isLength({ min: 6 })
+    .withMessage("A nova senha deve ter pelo menos 6 caracteres"),
+];
