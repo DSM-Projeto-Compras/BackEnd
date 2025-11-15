@@ -55,7 +55,7 @@ export const validaCadastroAdmin = [
 ];
 
 export const validaDeleteUser = [
-  param("id").isMongoId().withMessage("ID do usuário inválido"),
+  param("id").notEmpty().withMessage("ID do usuário é obrigatório"),
 ];
 
 export const validaForgotPassword = [
@@ -95,6 +95,14 @@ export const validaResetPassword = [
     .isNumeric()
     .withMessage("O código deve conter apenas números"),
   check("novaSenha")
+    .notEmpty()
+    .withMessage("A nova senha é obrigatória")
+    .isLength({ min: 6 })
+    .withMessage("A nova senha deve ter pelo menos 6 caracteres"),
+];
+
+export const validaChangePassword = [
+  check("senha")
     .notEmpty()
     .withMessage("A nova senha é obrigatória")
     .isLength({ min: 6 })

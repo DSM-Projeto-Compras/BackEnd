@@ -41,19 +41,24 @@ export const login = async (req, res) => {
       return res.status(403).json({ message: "Senha incorreta" });
     }
 
-    jwt.sign(
-      { userId: usuario.id },
-      process.env.SECRET_KEY,
-      { expiresIn: process.env.EXPIRES_IN },
-      (err, token) => {
-        if (err) throw err;
-        res.status(200).json({ access_token: token, cargo: usuario.cargo });
+    const tokenPayload = {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      cargo: usuario.cargo,
+      dataCriacao: usuario.dataCriacao,
+    };
+    console.log(">>> tokenPayload to sign:", tokenPayload);
+
+    jwt.sign(tokenPayload, process.env.SECRET_KEY, { expiresIn: process.env.EXPIRES_IN }, (err, token) => {
+      if (err) throw err;
+      console.log(">>> signed token:", token);
+      res.status(200).json({ access_token: token, cargo: usuario.cargo });
+    });
+      } catch (err) {
+        res.status(500).json({ message: `${err.message} Erro no server` });
       }
-    );
-  } catch (err) {
-    res.status(500).json({ message: `${err.message} Erro no server` });
-  }
-};
+    };
 
 export const registerAdmin = async (req, res) => {
   try {
@@ -99,7 +104,14 @@ export const deleteUser = async (req, res) => {
         .json({ message: "Você não pode deletar sua própria conta" });
     }
 
-    if (req.user.dataCriacao > usuarioADeletar.dataCriacao) {
+    const requesterDate = req.user && req.user.dataCriacao ? new Date(req.user.dataCriacao).getTime() : null;
+    const targetDate = usuarioADeletar && usuarioADeletar.dataCriacao ? new Date(usuarioADeletar.dataCriacao).getTime() : null;
+
+    if (requesterDate === null || isNaN(requesterDate) || targetDate === null || isNaN(targetDate)) {
+      return res.status(400).json({ message: "Dados de criação não disponíveis para verificação." });
+    }
+
+    if (requesterDate > targetDate) {
       return res.status(403).json({
         message: "Você não pode deletar usuários mais antigos que você",
       });
@@ -219,6 +231,51 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+export const changePassword = async (req, res) => {
+  console.log("Usuário autenticado:", req.user);
+  try {
+    const { senhaAtual, novaSenha, confirmaNovaSenha } = req.body;
+
+    if (!senhaAtual || !novaSenha || !confirmaNovaSenha) {
+      return res.status(400).json({ message: "Preencha todos os campos." });
+    }
+
+    if (novaSenha !== confirmaNovaSenha) {
+      return res.status(400).json({ message: "As senhas não coincidem." });
+    }
+
+    const usuario = await User.findById(req.user.id);
+
+    const senhaCorreta = await bcrypt.compare(senhaAtual, usuario.senha);
+    if (!senhaCorreta) {
+      return res.status(403).json({ message: "Senha atual incorreta." });
+    }
+
+    const senhaCriptografada = await bcrypt.hash(novaSenha, 10);
+    await User.findByIdAndUpdate(usuario.id, { senha: senhaCriptografada });
+
+    res.status(200).json({ message: "Senha alterada com sucesso!" });
+  } catch (err) {
+    res.status(500).json({ message: `Erro ao alterar senha: ${err.message}` });
+  }
+};
+
+export const getMe = async (req, res) => {
+  try {
+    const usuario = await User.findById(req.user.id);
+
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+    
+    // Remove senha do resultado
+    const { senha, ...usuarioWithoutPassword } = usuario;
+    res.status(200).json(usuarioWithoutPassword);
+  } catch (err) {
+    res.status(500).json({ message: `${err.message} Erro no server` });
+  }
+};
+
 export const getAdmins = async (req, res) => {
   try {
     const admins = await User.find({ cargo: "admin" });
@@ -228,22 +285,6 @@ export const getAdmins = async (req, res) => {
       return adminWithoutPassword;
     });
     res.status(200).json(adminsWithoutPassword);
-  } catch (err) {
-    res.status(500).json({ message: `${err.message} Erro no server` });
-  }
-};
-
-export const getMe = async (req, res) => {
-  try {
-    const usuario = await User.findById(req.user.userId);
-
-    if (!usuario) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
-    }
-    
-    // Remove senha do resultado
-    const { senha, ...usuarioWithoutPassword } = usuario;
-    res.status(200).json(usuarioWithoutPassword);
   } catch (err) {
     res.status(500).json({ message: `${err.message} Erro no server` });
   }

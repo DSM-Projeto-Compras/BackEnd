@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import User from "../models/LoginModel.js";
 
 const authAdmin = (req, res, next) => {
   let token = req.header("access-token");
@@ -10,40 +9,30 @@ const authAdmin = (req, res, next) => {
       token = authHeader.split(" ")[1];
     }
   }
+
   if (!token) {
     return res
-      .status(401).json({ message: "Acesso negado. Nenhum token fornecido." });
+      .status(401)
+      .json({ message: "Acesso negado. Nenhum token fornecido." });
   }
+
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     console.log("Decoded JWT:", decoded);
-    User.findById(decoded.userId)
-      .then((user) => {
-        if (!user) {
-          return res.status(404).json({ message: "Usuário não encontrado." });
-        }
 
-        if (user.cargo !== "admin") {
-          return res
-            .status(403)
-            .json({
-              message:
-                "Acesso negado. Apenas administradores podem acessar esta rota.",
-            });
-        }
+    // ✅ Armazena o payload do token no req.user
+    req.user = decoded;
+    if (decoded.cargo && decoded.cargo !== "admin") {
+      return res
+        .status(403)
+        .json({
+          message: "Acesso negado. Apenas administradores podem acessar esta rota.",
+        });
+    }
 
-        req.user = user;
-        next();
-      })
-      .catch((err) => {
-        res
-          .status(500)
-          .json({
-            message: "Erro ao buscar informações do usuário.",
-            error: err.message,
-          });
-      });
+    next();
   } catch (err) {
+    console.error("Erro no authAdmin:", err);
     res.status(400).json({ message: "Token inválido." });
   }
 };
