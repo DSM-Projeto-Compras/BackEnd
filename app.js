@@ -10,6 +10,7 @@ import LoginRoute from './routes/LoginRoute.js';
 import productRoutes from './routes/ProductRoute.js';
 import logsRoute from './routes/LogsRoute.js';
 import BECRoute from './routes/BECRoute.js';
+import supplierRoutes from './routes/SupplierRoute.js';
 
 import swaggerUI from 'swagger-ui-express'
 import swaggerFile  from './swagger/swagger_output.json' with { type: 'json' };
@@ -58,6 +59,7 @@ app.use('/api/logins', LoginRoute);
 app.use('/api/products', productRoutes);
 app.use('/api/logs', logsRoute);
 app.use('/api/bec', BECRoute);
+app.use('/api/suppliers', supplierRoutes);
 
 /* app.use('/api/doc', swaggerUI.serve, swaggerUI.setup(JSON.parse(fs.readFileSync('./swagger/swagger_output.json')),{customCss:
   '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',

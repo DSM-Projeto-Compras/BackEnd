@@ -53,3 +53,19 @@ model Log {
 
   @@map("logs")
 }
+
+model Supplier {
+  id          String   @id @default(cuid())
+  nome        String
+  cnpj        String   @unique
+  cep         String?
+  rua         String?
+  cidade      String?
+  estado      String?
+  numero      String?
+  email       String?
+  telefone    String?
+  dataCriacao DateTime @default(now())
+
+  @@map("suppliers")
+}
