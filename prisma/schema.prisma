@@ -22,14 +22,20 @@ model User {
 }
 
 model Product {
-  id            String   @id @default(cuid())
-  nome          String
-  tipo          String
-  quantidade    Int
-  categoria     String
-  descricao     String?
-  data          DateTime @default(now())
-  status        String   @default("Pendente")
+  id           String   @id @default(cuid())
+  nome         String
+  tipo         String
+  quantidade   Int
+  categoria    String
+  descricao    String?
+  cod_id       String?
+  grupo        String?
+  classe       String?
+  material     String?
+  elemento     String?
+  natureza     String?
+  data         DateTime @default(now())
+  status       String   @default("Pendente") // "Pendente", "Aprovado", "Negado"
   justificativa String?
   userId        String
   classe        String?

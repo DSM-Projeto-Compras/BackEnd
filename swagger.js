@@ -7,8 +7,9 @@ const doc = {
         title: "API Compras Fatec Votorantim"
     },
     host: 'back-end-three-lyart.vercel.app',
+    // host: 'localhost:3000',
     basePath: "/",
-    schemes: ['https'],
+    schemes: ['https', 'http'],
     consumes: ['application/json'],
     produces: ['application/json'],
     securityDefinitions: {

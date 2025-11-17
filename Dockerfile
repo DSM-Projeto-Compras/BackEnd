@@ -16,8 +16,14 @@ RUN npm install
 # Copia todos os arquivos da pasta raiz para a pasta de trabalho no container
 COPY . .
 
+# Debug do conteúdo do schema.prisma
+RUN cat prisma/schema.prisma
+
 # Gera o cliente Prisma
 RUN npx prisma generate
+
+# Debug pós-geração
+RUN cat prisma/schema.prisma
 
 # Variáveis de ambiente para MySQL/Prisma
 # ENV DATABASE_URL="mysql://user:password@host:port/database"

@@ -1,6 +1,6 @@
 {
   "name": "projetomvcrestful",
-  "version": "0.8.8",
+  "version": "0.17.0",
   "description": "Projeto Interdisciplinar MVC RESTful da Fatec",
   "main": "app.js",
   "type": "module",
@@ -8,12 +8,14 @@
     "doc": "node swagger.js",
     "test": "jest",
     "start": "node app.js",
+    "build": "prisma generate && cat prisma/schema.prisma",
     "dev": "nodemon app.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "postinstall": "prisma generate"
   },
   "keywords": [
     "MVC",
@@ -28,6 +30,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
+    "cheerio": "^1.1.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",

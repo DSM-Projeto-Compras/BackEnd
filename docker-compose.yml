@@ -59,21 +59,33 @@
 version: "3.8"
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-compras
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: mysql-compras
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: adminfatec
+  #     MYSQL_DATABASE: projetoCompras
+  #     MYSQL_USER: admin
+  #     MYSQL_PASSWORD: adminfatec
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   networks:
+  #     - rede_compras
+  #   command: --default-authentication-plugin=mysql_native_password
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-compras
     environment:
-      MYSQL_ROOT_PASSWORD: adminfatec
-      MYSQL_DATABASE: projetoCompras
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: adminfatec
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminfatec
+      POSTGRES_DB: projetoCompras
     ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
+      - "5432:5432" # Porta padrão do Postgres
     networks:
       - rede_compras
-    command: --default-authentication-plugin=mysql_native_password
 
   backend:
     build:
@@ -86,17 +98,17 @@ services:
       - /BackEnd/node_modules
     working_dir: /BackEnd
     environment:
-      - DATABASE_URL=mysql://admin:adminfatec@mysql:3306/projetoCompras
-      - DB_HOST=mysql
+      - DATABASE_URL=postgresql://admin:adminfatec@postgres:5432/projetoCompras
+      - DB_HOST=postgres
       - DB_USER=admin
       - DB_PASSWORD=adminfatec
       - DB_NAME=projetoCompras
-      - DB_PORT=3306
+      - DB_PORT=5432
       - SECRET_KEY=${SECRET_KEY}
       - EXPIRES_IN=${EXPIRES_IN}
       - PORT=4000
     depends_on:
-      - mysql
+      - postgres
     networks:
       - rede_compras
 
