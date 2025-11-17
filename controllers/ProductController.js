@@ -40,7 +40,7 @@ export const createProduct = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
     const { quantidade, descricao, ...outrasProps } = req.body;
-    const userId = req.user.userId;
+    const userId = req.user.id;
     const justificativa = "";
     const descricaoTratada = descricao ?? "";
 
@@ -70,7 +70,10 @@ export const createProduct = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
+  
   try {
+    console.log("params id: ", req.params.id)
+    console.log("produto:", await Product.findById(req.params.id))
     const productId = req.params.id;
     const product = await Product.findById(productId);
 
@@ -78,7 +81,7 @@ export const deleteProduct = async (req, res) => {
       return res.status(404).json({ message: "Produto não encontrado" });
     }
 
-    if (product.userId !== req.user.userId) {
+    if (product.userId !== req.user.id) {
       return res
         .status(403)
         .json({ message: "Você não tem permissão para excluir este produto" });
@@ -123,7 +126,7 @@ export const updateProduct = async (req, res) => {
           });
       }
     }
-    if (product.userId !== req.user.userId) {
+    if (product.userId !== req.user.id) {
       await logError("Usuário não autorizado a atualizar o produto", req, {
         body: req.body,
         user: req.user?.id,

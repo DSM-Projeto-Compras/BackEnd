@@ -262,6 +262,11 @@ export const changePassword = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
+    if (!req.user || !req.user.id) {
+      // Se o middleware falhou em injetar o usuário, retorna 401 ou 403
+      return res.status(401).json({ message: "Acesso não autorizado: Token inválido ou ausente." });
+    }
+
     const usuario = await User.findById(req.user.id);
 
     if (!usuario) {
@@ -269,9 +274,11 @@ export const getMe = async (req, res) => {
     }
     
     // Remove senha do resultado
-    const { senha, ...usuarioWithoutPassword } = usuario;
+    const userObject = usuario.toJSON ? usuario.toJSON() : usuario;
+    const { senha, ...usuarioWithoutPassword } = userObject;
     res.status(200).json(usuarioWithoutPassword);
   } catch (err) {
+    console.error("Erro no server ao buscar /getme:", err.message)
     res.status(500).json({ message: `${err.message} Erro no server` });
   }
 };
