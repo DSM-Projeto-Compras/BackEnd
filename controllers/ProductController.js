@@ -37,23 +37,8 @@ export const createProduct = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-<<<<<<< HEAD
     const { quantidade, descricao, ...outrasProps } = req.body;
     const userId = req.user.id;
-=======
-    const {
-      quantidade,
-      descricao,
-      cod_id,
-      grupo,
-      classe,
-      material,
-      elemento,
-      natureza,
-      ...outrasProps
-    } = req.body;
-    const userId = req.user.userId;
->>>>>>> 57f117208be11165fb889d11e73448e7545ce451
     const justificativa = "";
     const descricaoTratada = descricao ?? "";
 
