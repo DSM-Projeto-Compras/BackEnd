@@ -38,12 +38,6 @@ model Product {
   status       String   @default("Pendente") // "Pendente", "Aprovado", "Negado"
   justificativa String?
   userId        String
-  classe        String?
-  cod_id        String?
-  elemento      String?
-  grupo         String?
-  material      String?
-  natureza      String?
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("products")
