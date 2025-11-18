@@ -18,7 +18,7 @@ export const getProducts = async (req, res) => {
 
 export const getProductByUserId = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.id;
     const products = await Product.find({ userId });
     if (!products) {
       return res.status(404).json({ message: "Produto não encontrado" });
@@ -37,7 +37,7 @@ export const createProduct = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { quantidade, descricao, ...outrasProps } = req.body;
+    const { quantidade, descricao, cod_id, grupo, classe, material, elemento, natureza, ...outrasProps } = req.body;
     const userId = req.user.id;
     const justificativa = "";
     const descricaoTratada = descricao ?? "";
