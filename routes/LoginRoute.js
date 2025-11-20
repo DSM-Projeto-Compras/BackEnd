@@ -22,6 +22,7 @@ import {
   validaChangePassword,
 } from "../validators/LoginValidator.js";
 import authAdmin from "../middlewares/authAdmin.js";
+import auth from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ const router = express.Router();
  */
 
 router.get("/", authAdmin, getAdmins);
-router.get("/me", authAdmin, getMe);
+router.get("/me", auth, getMe);
 router.post("/cadastro", validaCadastro, register);
 router.post("/", validaLogin, login);
 router.post("/cadastro-admin", authAdmin, validaCadastroAdmin, registerAdmin);
