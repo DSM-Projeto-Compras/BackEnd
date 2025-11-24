@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/LoginModel.js";
 import { sendPasswordResetCode } from "../services/EmailService.js";
 
+import { logInfo, logError } from "../logger.js";
+
 export const register = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -76,6 +78,11 @@ export const registerAdmin = async (req, res) => {
       cargo: "admin",
     });
 
+    await logInfo("Usuário administrador criado com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
+    });
+
     const { senha: _, ...usuarioSemSenha } = usuario;
     res.status(201).json(usuarioSemSenha);
   } catch (err) {
@@ -112,10 +119,19 @@ export const deleteUser = async (req, res) => {
     }
 
     if (requesterDate > targetDate) {
+      await logError("Tentativa de deletar usuário mais antigo", req, {
+        body: req.body,
+        user: req.user?.id,
+      });
       return res.status(403).json({
         message: "Você não pode deletar usuários mais antigos que você",
       });
     }
+
+    await logInfo("Usuário administrador deletado com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
+    });
 
     await User.findByIdAndDelete(id);
     res.status(200).json({ message: "Usuário deletado com sucesso" });
@@ -225,6 +241,12 @@ export const resetPassword = async (req, res) => {
       codigoExp: null,
     });
 
+    await logInfo("Senha redefinida com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
+      action: "resetPassword"
+    });
+
     res.status(200).json({ message: "Senha redefinida com sucesso" });
   } catch (err) {
     res.status(500).json({ message: `${err.message} Erro no server` });
@@ -253,6 +275,12 @@ export const changePassword = async (req, res) => {
 
     const senhaCriptografada = await bcrypt.hash(novaSenha, 10);
     await User.findByIdAndUpdate(usuario.id, { senha: senhaCriptografada });
+
+    await logInfo("Senha alterada com sucesso", req, {
+      body: req.body,
+      user: req.user?.id,
+      action: "changePassword"
+    });
 
     res.status(200).json({ message: "Senha alterada com sucesso!" });
   } catch (err) {
