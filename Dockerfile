@@ -4,14 +4,17 @@ FROM node:20
 # Diretório dos arquivos no container
 WORKDIR /app
 
-# Atualiza o bcrypt
-RUN npm rebuild bcrypt --build-from-source
-
 # Copia os arquivos package*.json ./ para o diretório de arquivo
 COPY package*.json ./
 
+# Copia a pasta prisma antes da instalação das dependências
+COPY prisma ./prisma
+
 # Baixa e instala as dependências
 RUN npm install
+
+# Atualiza o bcrypt
+RUN npm rebuild bcrypt --build-from-source
 
 # Copia todos os arquivos da pasta raiz para a pasta de trabalho no container
 COPY . .
