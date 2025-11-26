@@ -1,0 +1,48 @@
+### Listar todos os fornecedores (Admin)
+GET http://localhost:4000/api/suppliers
+access-token: SEU_TOKEN_ADMIN_AQUI
+
+###
+
+### Buscar fornecedor por ID (Admin)
+GET http://localhost:4000/api/suppliers/ID_DO_FORNECEDOR
+access-token: SEU_TOKEN_ADMIN_AQUI
+
+###
+
+### Criar fornecedor (Admin)
+POST http://localhost:4000/api/suppliers
+Content-Type: application/json
+access-token: SEU_TOKEN_ADMIN_AQUI
+
+{
+  "nome": "Fornecedor Exemplo LTDA",
+  "cnpj": "12.345.678/0001-90",
+  "cep": "01310-100",
+  "rua": "Avenida Paulista",
+  "cidade": "São Paulo",
+  "estado": "SP",
+  "numero": "1578",
+  "email": "contato@fornecedor.com.br",
+  "telefone": "(11) 98765-4321"
+}
+
+###
+
+### Atualizar fornecedor (Admin)
+PUT http://localhost:4000/api/suppliers/ID_DO_FORNECEDOR
+Content-Type: application/json
+access-token: SEU_TOKEN_ADMIN_AQUI
+
+{
+  "nome": "Fornecedor Atualizado LTDA",
+  "cnpj": "12.345.678/0001-90",
+  "email": "novoemail@fornecedor.com.br",
+  "telefone": "(11) 91234-5678"
+}
+
+###
+
+### Excluir fornecedor (Admin)
+DELETE http://localhost:4000/api/suppliers/ID_DO_FORNECEDOR
+access-token: SEU_TOKEN_ADMIN_AQUI

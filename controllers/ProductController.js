@@ -9,18 +9,16 @@ export const getProducts = async (req, res) => {
 
     res.status(200).json(products);
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        message: "Erro ao obter a listagem dos produtos",
-        error: err.message,
-      });
+    res.status(500).json({
+      message: "Erro ao obter a listagem dos produtos",
+      error: err.message,
+    });
   }
 };
 
 export const getProductByUserId = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.id;
     const products = await Product.find({ userId });
     if (!products) {
       return res.status(404).json({ message: "Produto não encontrado" });
@@ -39,8 +37,8 @@ export const createProduct = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { quantidade, descricao, ...outrasProps } = req.body;
-    const userId = req.user.userId;
+    const { quantidade, descricao, cod_id, grupo, classe, material, elemento, natureza, ...outrasProps } = req.body;
+    const userId = req.user.id;
     const justificativa = "";
     const descricaoTratada = descricao ?? "";
 
@@ -49,6 +47,12 @@ export const createProduct = async (req, res) => {
       justificativa: justificativa,
       userId,
       descricao: descricaoTratada,
+      cod_id: cod_id ?? null,
+      grupo: grupo ?? null,
+      classe: classe ?? null,
+      material: material ?? null,
+      elemento: elemento ?? null,
+      natureza: natureza ?? null,
       ...outrasProps,
     };
 
@@ -70,7 +74,10 @@ export const createProduct = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
+  
   try {
+    console.log("params id: ", req.params.id)
+    console.log("produto:", await Product.findById(req.params.id))
     const productId = req.params.id;
     const product = await Product.findById(productId);
 
@@ -78,17 +85,15 @@ export const deleteProduct = async (req, res) => {
       return res.status(404).json({ message: "Produto não encontrado" });
     }
 
-    if (product.userId !== req.user.userId) {
+    if (product.userId !== req.user.id) {
       return res
         .status(403)
         .json({ message: "Você não tem permissão para excluir este produto" });
     }
     if (product.status !== "Pendente") {
-      return res
-        .status(403)
-        .json({
-          message: "Só é permitido excluir produtos com status Pendente",
-        });
+      return res.status(403).json({
+        message: "Só é permitido excluir produtos com status Pendente",
+      });
     }
 
     const result = await Product.findByIdAndDelete(productId);
@@ -115,24 +120,19 @@ export const updateProduct = async (req, res) => {
           body: req.body,
           user: req.user?.id,
         });
-        return res
-          .status(403)
-          .json({
-            message:
-              "Você não tem permissão para atualizar os status do produto",
-          });
+        return res.status(403).json({
+          message: "Você não tem permissão para atualizar os status do produto",
+        });
       }
     }
-    if (product.userId !== req.user.userId) {
+    if (product.userId !== req.user.id) {
       await logError("Usuário não autorizado a atualizar o produto", req, {
         body: req.body,
         user: req.user?.id,
       });
-      return res
-        .status(403)
-        .json({
-          message: "Você não tem permissão para atualizar este produto",
-        });
+      return res.status(403).json({
+        message: "Você não tem permissão para atualizar este produto",
+      });
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -165,11 +165,9 @@ export const updateProductStatus = async (req, res) => {
     }
 
     if (product.status !== "Pendente") {
-      return res
-        .status(400)
-        .json({
-          message: 'O status só pode ser alterado se estiver "Pendente".',
-        });
+      return res.status(400).json({
+        message: 'O status só pode ser alterado se estiver "Pendente".',
+      });
     }
 
     if (!["Aprovado", "Negado"].includes(status)) {
@@ -192,22 +190,18 @@ export const updateProductStatus = async (req, res) => {
       body: req.body,
       user: req.user?.id,
     });
-    res
-      .status(200)
-      .json({
-        message: "Status do produto atualizado com sucesso",
-        product: updatedProduct,
-      });
+    res.status(200).json({
+      message: "Status do produto atualizado com sucesso",
+      product: updatedProduct,
+    });
   } catch (err) {
     await logError("Erro ao atualizar status do produto", req, err, {
       body: req.body,
       user: req.user?.id,
     });
-    res
-      .status(500)
-      .json({
-        message: "Erro ao atualizar o status do produto",
-        error: err.message,
-      });
+    res.status(500).json({
+      message: "Erro ao atualizar o status do produto",
+      error: err.message,
+    });
   }
 };

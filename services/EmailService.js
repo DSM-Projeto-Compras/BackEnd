@@ -1,18 +1,21 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
-  secure: false, // true for 465, false for other ports
+  service: "gmail",
+  //host: "sandbox.smtp.mailtrap.io",
+  //port: 587,
+  //secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.MAILTRAP_USER,
-    pass: process.env.MAILTRAP_PASS,
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+    //user: process.env.MAILTRAP_USER,
+    //pass: process.env.MAILTRAP_PASS,
   },
 });
 
 export const sendPasswordResetCode = async (email, code) => {
   const mailOptions = {
-    from: '"Sistema de Recuperação" <noreply@sistema.com>',
+    from: '"Gerenciador de Pedidos de Compra" <${process.env.GMAIL_USER}>',
     to: email,
     subject: "Código de Recuperação de Senha",
     html: `

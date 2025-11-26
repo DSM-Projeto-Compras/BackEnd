@@ -7,6 +7,7 @@ import {
   forgotPassword,
   verifyCode,
   resetPassword,
+  changePassword,
   getAdmins,
   getMe,
 } from "../controllers/LoginController.js";
@@ -18,8 +19,10 @@ import {
   validaForgotPassword,
   validaVerifyCode,
   validaResetPassword,
+  validaChangePassword,
 } from "../validators/LoginValidator.js";
 import authAdmin from "../middlewares/authAdmin.js";
+import auth from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -29,7 +32,7 @@ const router = express.Router();
  */
 
 router.get("/", authAdmin, getAdmins);
-router.get("/me", authAdmin, getMe);
+router.get("/me", auth, getMe);
 router.post("/cadastro", validaCadastro, register);
 router.post("/", validaLogin, login);
 router.post("/cadastro-admin", authAdmin, validaCadastroAdmin, registerAdmin);
@@ -37,5 +40,6 @@ router.delete("/usuario/:id", authAdmin, validaDeleteUser, deleteUser);
 router.post("/forgot", validaForgotPassword, forgotPassword);
 router.post("/verify", validaVerifyCode, verifyCode);
 router.patch("/reset", validaResetPassword, resetPassword);
+router.patch("/change", authAdmin, validaChangePassword, changePassword);
 
 export default router;

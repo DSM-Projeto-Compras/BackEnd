@@ -4,20 +4,29 @@ FROM node:20
 # Diretório dos arquivos no container
 WORKDIR /app
 
-# Atualiza o bcrypt
-RUN npm rebuild bcrypt --build-from-source
-
 # Copia os arquivos package*.json ./ para o diretório de arquivo
 COPY package*.json ./
+
+# Copia a pasta prisma antes da instalação das dependências
+COPY prisma ./prisma
 
 # Baixa e instala as dependências
 RUN npm install
 
+# Atualiza o bcrypt
+RUN npm rebuild bcrypt --build-from-source
+
 # Copia todos os arquivos da pasta raiz para a pasta de trabalho no container
 COPY . .
 
+# Debug do conteúdo do schema.prisma
+RUN cat prisma/schema.prisma
+
 # Gera o cliente Prisma
 RUN npx prisma generate
+
+# Debug pós-geração
+RUN cat prisma/schema.prisma
 
 # Variáveis de ambiente para MySQL/Prisma
 # ENV DATABASE_URL="mysql://user:password@host:port/database"
