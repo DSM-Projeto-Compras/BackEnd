@@ -25,8 +25,9 @@ connectToDatabase();
 
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: '*',
+  optionsSuccessStatus: 204,
 }));
 app.use(express.json())
 app.disable('x-powered-by')
