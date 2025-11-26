@@ -1,0 +1,121 @@
+{
+  "intents": [
+    {
+      "tag": "affirmation",
+      "patterns": ["sim", "isso", "claro", "uhum", "aham", "siim"],
+      "responses": []
+    },
+    {
+      "tag": "negation",
+      "patterns": ["não", "nao", "negativo", "nop", "n", "ñ"],
+      "responses": []
+    },
+    {
+      "tag": "saudacao",
+      "patterns": ["Oi", "Olá", "Ola", "Bom dia", "Boa tarde", "Boa noite", "Eai", "Eae", "Salve"],
+      "responses": ["Olá! Precisa de ajuda?", "Oi! Posso te ajudar?"]
+    },
+    {
+      "tag": "ajuda_sim",
+      "patterns": ["Sim, por favor", "Quero ajuda", "Preciso de ajuda", "pode me ajudar", "ajuda ai"],
+      "responses": [
+        "Sua dúvida está relacionada a que tipo de problema?\n\n- Não consigo realizar o pedido\n- Não sei visualizar um pedido\n- Tenho dificuldades para definir um pedido"
+      ]
+    },
+    {
+      "tag": "ajuda_nao",
+      "patterns": ["Não precisa", "Tudo certo", "não obrigado", "tranquilo", "tudo ok"],
+      "responses": ["Ok! Se precisar, estou aqui."]
+    },
+    {
+      "tag": "problema_pedido",
+      "patterns": ["Não consigo realizar o pedido", "Pedido não vai", "Erro no pedido", "pedido não funciona", "pedido n funfa", "Realizar um pedido"],
+      "responses": [
+        "Quando você insere um produto, aparece uma lista de sugestões?"
+      ]
+    },
+    {
+      "tag": "pedido_sugestao_sim",
+      "patterns": [
+        "aparece", "aparece sim", "está aparecendo",
+        "sim aparece", "ta aparecendo", "está sim"
+      ],
+      "responses": [
+        "Certifique-se de selecionar um item da lista. Após selecionar, deve aparecer uma confirmação com os dados da Bolsa Eletrônica de Compras."
+      ]
+    },
+    {
+      "tag": "pedido_sugestao_nao",
+      "patterns": [
+        "não aparece", "nao aparece", "n aparece", "não aparesse",
+        "nao ta aparecendo", "não ta aparecendo", "não tá aparessendo"
+      ],
+      "responses": [
+        "O servidor não está respondendo direito. Aguarde um momento e tente novamente mais tarde."
+      ]
+    },
+    {
+      "tag": "visualizar_pedido",
+      "patterns": [
+        "não sei visualizar um pedido",
+        "ver pedido", "como vejo meu pedido",
+        "visualizar pedido", "ver pedidos",
+        "onde vejo um pedido", "vizualizar pedido"
+      ],
+      "responses": [
+        "Na parte superior da tela, clique em 'Histórico' que fica entre 'Cadastrar Produto' e 'Sair'. Lá você verá todos os seus pedidos."
+      ]
+    },
+    {
+      "tag": "definir_pedido",
+      "patterns": ["Tenho dificuldades para definir um pedido", "Como definir pedido", "definir produto", "como definir um produto"],
+      "responses": [
+        "Você precisa de ajuda em qual ponto?\n\n- Encontrar o pedido/produto certo\n- Encontrar a categoria certa\n- Saber como estruturar um pedido"
+      ]
+    },
+    {
+      "tag": "definir_pedido_certo",
+      "patterns": [
+        "encontrar o pedido certo", "pedido certo",
+        "encontrar o produto certo", "produto certo",
+        "encontrar pedido", "achar produto",
+        "nao sei qual produto escolher"
+      ],
+      "responses": [
+        "Você pode selecionar um produto com descrição parecida, desde que seja passível de compra. Nesse caso, é importante descreve-lo bem no campo 'Descrição'."
+      ]
+    },
+    {
+      "tag": "definir_pedido_categoria",
+      "patterns": ["Encontrar a categoria certa", "Categoria certa", "Encontrar categoria", "qual categoria usar"],
+      "responses": [
+        "Selecione a categoria que melhor se encaixa com o produto, mesmo que não seja exata."
+      ]
+    },
+    {
+      "tag": "definir_pedido_estrutura",
+      "patterns": ["Saber como estruturar um pedido", "Estruturar pedido", "Como estruturo pedido"],
+      "responses": [
+        "Selecione um produto das sugestões da BEC e certifique-se de que ele é um tipo de material passível de compra em uma quantidade razoável. Verifique se possui dados técnicos e coloque-os na Descrição."
+      ]
+    },
+    {
+      "tag": "agradecimento",
+      "patterns": [
+        "obrigado", "obrigada", "muito obrigado", "vlw",
+        "valeu", "obg", "brigado", "tmj", "ok obrigado"
+      ],
+      "responses": ["De nada! Estarei disponível para futuras dúvidas", "Por nada! Se tiver outras dúvidas pode me chamar!"]
+    },
+    {
+      "tag": "despedida",
+      "patterns": [
+        "tchau", "adeus", "até logo",
+        "falou", "até mais", "flw", "até"
+      ],
+      "responses": ["Até mais!", "Tchau! Volte sempre!"]
+    }
+  ]
+}
+
+
