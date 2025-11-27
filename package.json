@@ -1,6 +1,6 @@
 {
   "name": "projetomvcrestful",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Projeto Interdisciplinar MVC RESTful da Fatec",
   "main": "app.js",
   "type": "module",
