@@ -205,3 +205,205 @@ export const updateProductStatus = async (req, res) => {
     });
   }
 };
+
+// Marcar produto como Realizado (com fornecedor)
+export const markAsRealized = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { supplierId } = req.body;
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    if (product.status !== "Aprovado") {
+      return res.status(400).json({
+        message:
+          'O produto deve estar com status "Aprovado" para ser marcado como Realizado.',
+      });
+    }
+
+    if (!supplierId) {
+      return res.status(400).json({
+        message: "É necessário informar um fornecedor.",
+      });
+    }
+
+    const updateData = {
+      status: "Realizado",
+      supplierId: supplierId,
+    };
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      updateData
+    );
+
+    await logInfo("Produto marcado como Realizado", req, {
+      productId,
+      supplierId,
+      user: req.user?.id,
+    });
+
+    res.status(200).json({
+      message: "Produto marcado como Realizado com sucesso",
+      product: updatedProduct,
+    });
+  } catch (err) {
+    await logError("Erro ao marcar produto como Realizado", req, err, {
+      productId: req.params.id,
+      user: req.user?.id,
+    });
+    res.status(500).json({
+      message: "Erro ao marcar produto como Realizado",
+      error: err.message,
+    });
+  }
+};
+
+// Marcar produto como Entregue
+export const markAsDelivered = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    if (product.status !== "Realizado") {
+      return res.status(400).json({
+        message:
+          'O produto deve estar com status "Realizado" para ser marcado como Entregue.',
+      });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+      status: "Entregue",
+    });
+
+    await logInfo("Produto marcado como Entregue", req, {
+      productId,
+      user: req.user?.id,
+    });
+
+    res.status(200).json({
+      message: "Produto marcado como Entregue com sucesso",
+      product: updatedProduct,
+    });
+  } catch (err) {
+    await logError("Erro ao marcar produto como Entregue", req, err, {
+      productId: req.params.id,
+      user: req.user?.id,
+    });
+    res.status(500).json({
+      message: "Erro ao marcar produto como Entregue",
+      error: err.message,
+    });
+  }
+};
+
+// Marcar produto como Finalizado
+export const markAsFinalized = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    if (product.status !== "Entregue") {
+      return res.status(400).json({
+        message:
+          'O produto deve estar com status "Entregue" para ser marcado como Finalizado.',
+      });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+      status: "Finalizado",
+    });
+
+    await logInfo("Produto marcado como Finalizado", req, {
+      productId,
+      user: req.user?.id,
+    });
+
+    res.status(200).json({
+      message: "Produto marcado como Finalizado com sucesso",
+      product: updatedProduct,
+    });
+  } catch (err) {
+    await logError("Erro ao marcar produto como Finalizado", req, err, {
+      productId: req.params.id,
+      user: req.user?.id,
+    });
+    res.status(500).json({
+      message: "Erro ao marcar produto como Finalizado",
+      error: err.message,
+    });
+  }
+};
+
+// Voltar status do produto (ex: de Entregue para Realizado)
+export const revertProductStatus = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Produto não encontrado" });
+    }
+
+    let newStatus;
+    switch (product.status) {
+      case "Realizado":
+        newStatus = "Aprovado";
+        break;
+      case "Entregue":
+        newStatus = "Realizado";
+        break;
+      case "Finalizado":
+        newStatus = "Entregue";
+        break;
+      default:
+        return res.status(400).json({
+          message: "Não é possível reverter o status deste produto.",
+        });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+      status: newStatus,
+    });
+
+    await logInfo(
+      `Produto revertido de ${product.status} para ${newStatus}`,
+      req,
+      {
+        productId,
+        oldStatus: product.status,
+        newStatus,
+        user: req.user?.id,
+      }
+    );
+
+    res.status(200).json({
+      message: `Status revertido de ${product.status} para ${newStatus} com sucesso`,
+      product: updatedProduct,
+    });
+  } catch (err) {
+    await logError("Erro ao reverter status do produto", req, err, {
+      productId: req.params.id,
+      user: req.user?.id,
+    });
+    res.status(500).json({
+      message: "Erro ao reverter status do produto",
+      error: err.message,
+    });
+  }
+};

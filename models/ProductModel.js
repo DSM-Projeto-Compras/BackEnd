@@ -19,6 +19,14 @@ const Product = {
             id: true,
             nome: true
           }
+        },
+        supplier: {
+          select: {
+            id: true,
+            nome: true,
+            cnpj: true,
+            ativado: true
+          }
         }
       }
     });
@@ -33,6 +41,14 @@ const Product = {
           select: {
             id: true,
             nome: true
+          }
+        },
+        supplier: {
+          select: {
+            id: true,
+            nome: true,
+            cnpj: true,
+            ativado: true
           }
         }
       }
@@ -49,6 +65,14 @@ const Product = {
           select: {
             id: true,
             nome: true
+          }
+        },
+        supplier: {
+          select: {
+            id: true,
+            nome: true,
+            cnpj: true,
+            ativado: true
           }
         }
       }
@@ -71,6 +95,14 @@ const Product = {
           select: {
             id: true,
             nome: true
+          }
+        },
+        supplier: {
+          select: {
+            id: true,
+            nome: true,
+            cnpj: true,
+            ativado: true
           }
         }
       }

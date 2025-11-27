@@ -11,7 +11,7 @@ import authAdmin from "../middlewares/authAdmin.js";
 
 const router = express.Router();
 
-/* 
+/*
  * #swagger.tags = ['CRUD de Fornecedores']
  * #swagger.summary = 'Rota para gerenciamento de fornecedores (somente admin)'
  */
