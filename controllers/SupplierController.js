@@ -18,11 +18,11 @@ export const getSupplierById = async (req, res) => {
   try {
     const supplierId = req.params.id;
     const supplier = await Supplier.findById(supplierId);
-    
+
     if (!supplier) {
       return res.status(404).json({ message: "Fornecedor não encontrado" });
     }
-    
+
     res.status(200).json(supplier);
   } catch (err) {
     res.status(500).json({
@@ -41,9 +41,9 @@ export const createSupplier = async (req, res) => {
 
     const { cnpj, ...rest } = req.body;
 
-    // Verificar se o CNPJ já existe
+    // Verificar se o CNPJ já existe e está ativado
     const existingSupplier = await Supplier.findByCnpj(cnpj);
-    if (existingSupplier) {
+    if (existingSupplier && existingSupplier.ativado) {
       return res.status(400).json({
         message: "Já existe um fornecedor cadastrado com este CNPJ",
       });
@@ -60,7 +60,7 @@ export const createSupplier = async (req, res) => {
       body: req.body,
       user: req.user?.id,
     });
-    
+
     res.status(201).json(savedSupplier);
   } catch (err) {
     await logError("Erro ao criar fornecedor", req, err, {
@@ -75,21 +75,21 @@ export const updateSupplier = async (req, res) => {
   try {
     const supplierId = req.params.id;
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     const supplier = await Supplier.findById(supplierId);
-    
+
     if (!supplier) {
       return res.status(404).json({ message: "Fornecedor não encontrado" });
     }
 
-    // Se o CNPJ está sendo atualizado, verificar se não existe outro fornecedor com o mesmo CNPJ
+    // Se o CNPJ está sendo atualizado, verificar se não existe outro fornecedor com o mesmo CNPJ e ativado
     if (req.body.cnpj && req.body.cnpj !== supplier.cnpj) {
       const existingSupplier = await Supplier.findByCnpj(req.body.cnpj);
-      if (existingSupplier) {
+      if (existingSupplier && existingSupplier.ativado) {
         return res.status(400).json({
           message: "Já existe um fornecedor cadastrado com este CNPJ",
         });
@@ -105,7 +105,7 @@ export const updateSupplier = async (req, res) => {
       body: req.body,
       user: req.user?.id,
     });
-    
+
     res.status(200).json(updatedSupplier);
   } catch (err) {
     await logError("Erro ao atualizar fornecedor", req, err, {
@@ -126,23 +126,23 @@ export const deleteSupplier = async (req, res) => {
     }
 
     const result = await Supplier.findByIdAndDelete(supplierId);
-    
-    await logInfo("Fornecedor excluído com sucesso", req, {
+
+    await logInfo("Fornecedor desativado com sucesso", req, {
       supplierId,
       user: req.user?.id,
     });
-    
+
     res.status(200).json({
-      message: "Fornecedor excluído com sucesso",
+      message: "Fornecedor desativado com sucesso",
       supplier: result,
     });
   } catch (err) {
-    await logError("Erro ao excluir fornecedor", req, err, {
+    await logError("Erro ao desativar fornecedor", req, err, {
       supplierId: req.params.id,
       user: req.user?.id,
     });
     res.status(500).json({
-      message: "Erro ao excluir o fornecedor",
+      message: "Erro ao desativar o fornecedor",
       error: err.message,
     });
   }

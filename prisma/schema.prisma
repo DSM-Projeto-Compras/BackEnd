@@ -22,7 +22,7 @@ model User {
 }
 
 model Product {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   nome         String
   tipo         String
   quantidade   Int
@@ -34,11 +34,13 @@ model Product {
   material     String?
   elemento     String?
   natureza     String?
-  data         DateTime @default(now())
-  status       String   @default("Pendente") // "Pendente", "Aprovado", "Negado"
+  data         DateTime  @default(now())
+  status       String    @default("Pendente") // "Pendente", "Aprovado", "Negado", "Realizado", "Entregue", "Finalizado"
   justificativa String?
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  supplierId   String?
+  supplier     Supplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
 
   @@map("products")
 }
@@ -55,9 +57,9 @@ model Log {
 }
 
 model Supplier {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   nome        String
-  cnpj        String   @unique
+  cnpj        String    @unique
   cep         String?
   rua         String?
   cidade      String?
@@ -65,7 +67,9 @@ model Supplier {
   numero      String?
   email       String?
   telefone    String?
-  dataCriacao DateTime @default(now())
+  ativado     Boolean   @default(true)
+  dataCriacao DateTime  @default(now())
+  products    Product[]
 
   @@map("suppliers")
 }
