@@ -3,6 +3,9 @@ import prisma from "../utils/database.js";
 const Supplier = {
   async find() {
     return await prisma.supplier.findMany({
+      where: {
+        ativado: true,
+      },
       orderBy: {
         dataCriacao: "desc",
       },
@@ -35,8 +38,11 @@ const Supplier = {
   },
 
   async findByIdAndDelete(id) {
-    return await prisma.supplier.delete({
+    return await prisma.supplier.update({
       where: { id },
+      data: {
+        ativado: false,
+      },
     });
   },
 };
