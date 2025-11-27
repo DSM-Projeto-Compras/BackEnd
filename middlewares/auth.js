@@ -1,18 +1,20 @@
 import jwt from 'jsonwebtoken';
 
 const auth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  // const authHeader = req.headers.authorization;
+  const token = req.header('access-token');
 
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Acesso negado. Nenhum token fornecido.' });
-  }
-
-  // Divide: "Bearer TOKEN"
-  const [, token] = authHeader.split(" ");
-
+  // if (!authHeader) {
   if (!token) {
-    return res.status(401).json({ message: 'Formato de token inválido.' });
+  return res.status(401).json({ message: 'Acesso negado. Nenhum token fornecido.' });
   }
+
+  // // Divide: "Bearer TOKEN"
+  // const [, token] = authHeader.split(" ");
+
+  // if (!token) {
+  //   return res.status(401).json({ message: 'Formato de token inválido.' });
+  // }
 
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
