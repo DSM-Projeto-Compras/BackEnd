@@ -113,3 +113,22 @@
         }
       }
     },
+
+
+
+
+    "/mongodb/testar-conexao": {
+      "get": {
+        "tags": ["Conexões"],
+        "summary": "Rota que testa a conexão com o MongoDB",
+        "description": "Endpoint que retorna a conexão com o MongoDB",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },

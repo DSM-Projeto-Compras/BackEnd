@@ -31,21 +31,6 @@
         }
       }
     },
-    "/mongodb/testar-conexao": {
-      "get": {
-        "tags": ["Conexões"],
-        "summary": "Rota que testa a conexão com o MongoDB",
-        "description": "Endpoint que retorna a conexão com o MongoDB",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Erro Interno do Servidor"
-          }
-        }
-      }
-    },
     "/postgres/testar-conexao": {
       "get": {
         "tags": ["Conexões"],
@@ -327,6 +312,236 @@
         }
       }
     },
+    "/api/suppliers/": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["CRUD de Fornecedores"],
+        "description": "",
+        "summary": "Rota para listar fornecedores",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      },
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["CRUD de Fornecedores"],
+        "description": "",
+        "summary": "Rota para criar um novo fornecedor",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "example": "any"
+                },
+                "cep": {
+                  "example": "any"
+                },
+                "rua": {
+                  "example": "any"
+                },
+                "cidade": {
+                  "example": "any"
+                },
+                "estado": {
+                  "example": "any"
+                },
+                "numero": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "telefone": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado"
+          },
+          "400": {
+            "description": "Solicitação Inválida"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/suppliers/{id}": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["CRUD de Fornecedores"],
+        "description": "",
+        "summary": "Rota para buscar um fornecedor específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/bec/products/": {
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["BEC"],
+        "description": "",
+        "summary": "Rota para listar produtos do BEC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "prefixText": {
+                  "description": "Texto para busca de produtos",
+                  "example": "any"
+                },
+                "quantity": {
+                  "description": "Quantidade de produtos a serem retornados",
+                  "example": "20"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos encontrados"
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "500": {
+            "description": "Erro do servidor"
+          }
+        }
+      }
+    },
+    "/api/bec/search/": {
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["BEC"],
+        "description": "",
+        "summary": "Rota para buscar um produto por descrição no BEC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição do produto para busca",
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produto encontrado"
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Erro do servidor"
+          }
+        }
+      }
+    },
+    "/api/bec/product/{cod_id}": {
+      "get": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["BEC"],
+        "description": "",
+        "summary": "Rota para buscar um produto por código ID no BEC",
+        "parameters": [
+          {
+            "name": "cod_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Código ID do produto no BEC"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produto encontrado"
+          },
+          "400": {
+            "description": "Erro de validação"
+          },
+          "500": {
+            "description": "Erro do servidor"
+          }
+        }
+      }
+    },
+    "/api/bec/search-details/": {
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["BEC"],
+        "description": "",
+        "summary": "Rota para buscar detalhes de um produto no BEC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição do produto para busca",
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produto encontrado"
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Erro do servidor"
+          }
+        }
+      }
+    },
+
     "/api/logs/por-data/": {
       "get": {
         "security": [{ "apiKeyAuth": [] }],
@@ -419,6 +634,51 @@
           },
           "404": {
             "description": "Não Encontrado"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/chat/greet/": {
+      "get": {
+        "tags": ["Chatbot"],
+        "description": "",
+        "summary": "Rota de saudação do chatbot",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/api/chat/": {
+      "post": {
+        "security": [{ "apiKeyAuth": [] }],
+        "tags": ["Chatbot"],
+        "description": "",
+        "summary": "Rota para interagir com o chatbot",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "500": {
             "description": "Erro Interno do Servidor"

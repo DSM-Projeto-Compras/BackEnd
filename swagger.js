@@ -41,3 +41,40 @@ const options = {
 swaggerAutogen(options)(outputFile, endpointsFiles, doc).then(async () => {
     await import('./app.js'); // Your project's root file
   });
+
+// import swaggerJSDoc from 'swagger-jsdoc';
+// import fs from 'fs';
+
+// // Gera o arquivo OpenAPI (swagger) a partir de comentários JSDoc (@swagger)
+// // Usa os arquivos que possuem comentários: app.js, routes/*.js, controllers/*.js
+
+// const options = {
+//     definition: {
+//         openapi: '3.0.0',
+//         info: {
+//             version: '3.0.0',
+//             title: 'API Compras Fatec Votorantim',
+//             description: 'Documentação gerada automaticamente via swagger-jsdoc'
+//         },
+//         servers: [
+//             { url: 'https://back-end-three-lyart.vercel.app' },
+//             { url: 'http://localhost:4000' }
+//         ],
+//         components: {
+//             securitySchemes: {
+//                 bearerAuth: {
+//                     type: 'http',
+//                     scheme: 'bearer',
+//                     bearerFormat: 'JWT',
+//                     description: 'Token JWT obtido no login'
+//                 }
+//             }
+//         }
+//     },
+//     apis: ['./app.js', './routes/*.js', './controllers/*.js']
+// };
+
+// const swaggerSpec = swaggerJSDoc(options);
+// const outputFile = './swagger/swagger_output.json';
+// fs.writeFileSync(outputFile, JSON.stringify(swaggerSpec, null, 2));
+// console.log(`Swagger generated at ${outputFile}`);

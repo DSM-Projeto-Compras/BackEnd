@@ -48,6 +48,8 @@
     "prisma": "^6.16.2",
     "stopword": "^3.1.5",
     "swagger-ui-express": "^4.1.2"
+    ,
+    "swagger-jsdoc": "^6.2.8"
   },
   "devDependencies": {
     "jest": "^29.7.0",
